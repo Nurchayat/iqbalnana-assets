@@ -1,0 +1,8 @@
+/* Multi Related Post */
+.arldzgnMultiRelated{background-color:#e0dede;color:#000;margin:15px auto;display:-moz-box;display:-ms-flexbox;display:flex;flex-wrap:nowrap;justify-content:space-between;overflow:hidden;transition:all .3s}
+.arldzgnMultiRelated:hover{background-color:#dedcdc}
+.arldzgnMultiRelated .content{padding:12px 15px}
+.arldzgnMultiRelated .content .text{margin-right:5px}
+.arldzgnMultiRelated .content a{color:#2a2a2a;text-decoration:none;line-height:1.5em}
+.arldzgnMultiRelated .content a:hover{text-decoration:underline}
+.arldzgnMultiRelated .icon{height:auto;min-width:55px;background:#8c8a89 url(&quot;data:image/svg+xml,%3Csvg viewBox=&#39;0 0 24 24&#39; xmlns=&#39;https://www.w3.org/2000/svg&#39;%3E%3Cpath d=&#39;M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z&#39; fill=&#39;%23fff&#39;/%3E%3C/svg%3E&quot;) center / 40px no-repeat;transition:all .3s}
