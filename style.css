@@ -9,33 +9,3 @@
 .post-body ul li {
     list-style: none;
 }
-/* CSS for Post Pagination by Gemini */
-.page-navigation {
-  clear: both;
-  margin: 20px 0;
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-}
-.page-navigation span, .page-navigation a {
-  display: inline-block;
-  padding: 8px 14px;
-  margin: 0 2px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  text-decoration: none;
-  background-color: #f9f9f9;
-  color: #333;
-}
-.page-navigation span.current-page {
-  background-color: #007bff; /* Warna untuk halaman aktif */
-  color: #fff;
-  border-color: #007bff;
-}
-.page-navigation a:hover {
-  background-color: #eee;
-  border-color: #ccc;
-}
-.hidden-page {
-  display: none;
-}
