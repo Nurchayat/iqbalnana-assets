@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const imgEl = document.createElement('img');
   imgEl.src = randomImage;
-  imgEl.alt = "Ilustrasi otomatis";
+  imgEl.alt = "Ilustrasi random";
   imgEl.loading = "lazy";
   imgEl.style.maxWidth = "100%";
   imgEl.style.display = "block";
