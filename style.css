@@ -9,3 +9,179 @@
 .post-body ul li {
     list-style: none;
 }
+/* File CSS Gabungan untuk iqbalnana.com
+  Gabungkan semua style ini ke dalam satu file (misal: styles.css) 
+  dan host di GitHub untuk dipanggil melalui jsDelivr.
+*/
+
+/* ===== CSS Breadcrumb ===== */
+.breadcrumb-container {
+    padding: 15px 15px 0;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    text-transform: capitalize;
+}
+.breadcrumb-container a {
+    color: #4285f4;
+    text-decoration: none;
+}
+.breadcrumb-container a:hover {
+    text-decoration: underline;
+}
+.breadcrumb-container span.separator {
+    margin: 0 8px;
+    color: #999;
+}
+.breadcrumb-container span.current-page {
+    color: #777;
+}
+
+/* ===== CSS Multi Related Post ===== */
+.arldzgnMultiRelated {
+    background-color: #2a2a2a;
+    color: #fff;
+    margin: 15px auto;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    overflow: hidden;
+    transition: all .3s
+}
+.arldzgnMultiRelated:hover {
+    background-color: #222
+}
+.arldzgnMultiRelated .content {
+    padding: 12px 15px
+}
+.arldzgnMultiRelated .content .text {
+    margin-right: 5px
+}
+.arldzgnMultiRelated .content a {
+    color: #fff;
+    text-decoration: none;
+    line-height: 1.5em
+}
+.arldzgnMultiRelated .content a:hover {
+    text-decoration: underline
+}
+.arldzgnMultiRelated .icon {
+    height: auto;
+    min-width: 55px;
+    background: #f44336 url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='https://www.w3.org/2000/svg'%3E%3Cpath d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z' fill='%23fff'/%3E%3C/svg%3E") center / 40px no-repeat;
+    transition: all .3s
+}
+
+/* ===== CSS untuk Pemutar Audio TTS ===== */
+.tts-player-container {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+.tts-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s, transform 0.2s;
+}
+.tts-button:hover {
+    background-color: #2563eb;
+}
+#stop-btn {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+#stop-btn:hover {
+    background-color: #d1d5db;
+}
+.tts-highlight {
+    background-color: #fef9c3; /* yellow-100 */
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* ===== CSS Widget Gambar Mewarnai ===== */
+.coloring-widget-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+.coloring-widget-container h3 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #2c3e50;
+}
+.coloring-widget-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+.coloring-widget-card {
+    display: block;
+    text-decoration: none;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out;
+}
+.coloring-widget-card:hover {
+    transform: translateY(-4px);
+}
+.coloring-widget-card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid #eee;
+}
+.coloring-widget-card-title {
+    padding: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    background-color: #fff;
+    text-align: center;
+    line-height: 1.4;
+}
+@media (max-width: 768px) {
+    .coloring-widget-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ===== CSS Font Size Controller Widget (di Footer) ===== */
+#font-controls button {
+    padding: 6px 10px;
+    margin: 0 2px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+#font-controls button:hover {
+    background-color: #ddd;
+}
+
