@@ -1,180 +1,122 @@
-/* File CSS Gabungan untuk iqbalnana.com */
-
-/* ===== CSS Breadcrumb ===== */
-.breadcrumb-container {
-    padding: 15px 15px 0;
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
-    text-transform: capitalize;
-}
-.breadcrumb-container a {
-    color: #4285f4;
-    text-decoration: none;
-}
-.breadcrumb-container a:hover {
-    text-decoration: underline;
-}
-.breadcrumb-container span.separator {
-    margin: 0 8px;
-    color: #999;
-}
-.breadcrumb-container span.current-page {
-    color: #777;
-}
-
-/* ===== CSS Multi Related Post ===== */
-.arldzgnMultiRelated {
-    background-color: #2a2a2a;
-    color: #fff;
-    margin: 15px auto;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    overflow: hidden;
-    transition: all .3s
-}
-.arldzgnMultiRelated:hover {
-    background-color: #222
-}
-.arldzgnMultiRelated .content {
-    padding: 12px 15px
-}
-.arldzgnMultiRelated .content .text {
-    margin-right: 5px
-}
-.arldzgnMultiRelated .content a {
-    color: #fff;
-    text-decoration: none;
-    line-height: 1.5em
-}
-.arldzgnMultiRelated .content a:hover {
-    text-decoration: underline
-}
-.arldzgnMultiRelated .icon {
-    height: auto;
-    min-width: 55px;
-    background: #f44336 url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='https://www.w3.org/2000/svg'%3E%3Cpath d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z' fill='%23fff'/%3E%3C/svg%3E") center / 40px no-repeat;
-    transition: all .3s
-}
-
-/* ===== CSS untuk Post Tools Panel & TTS ===== */
+/* ===== CSS BARU untuk Post Tools Panel & TTS (Modern & Rapi) ===== */
 .post-tools-panel {
   display: flex;
+  flex-wrap: wrap; /* Agar responsif */
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  padding: 15px;
-  background-color: #f8f9fa;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa; /* Latar belakang yang bersih */
   border: 1px solid #e9ecef;
   border-radius: 12px;
-  margin-bottom: 1.5em;
+  margin-bottom: 2em;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 }
+
 .tool-group {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem; /* Jarak antar elemen dalam grup */
 }
+
+.tool-group > .label {
+  font-size: 14px;
+  color: #4b5563; /* Warna teks lebih gelap */
+  font-weight: 500;
+  margin-right: 0.25rem;
+}
+
+/* Style umum untuk semua tombol */
 .post-tools-panel .tool-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 0.375rem; /* 6px */
   background-color: #ffffff;
-  border: 1px solid #dee2e6;
+  border: 1px solid #d1d5db;
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #495057;
+  color: #374151;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   white-space: nowrap;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
+
 .post-tools-panel .tool-button:hover {
-  background-color: #f1f3f5;
-  border-color: #adb5bd;
+  background-color: #f9fafb;
+  border-color: #9ca3af;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
+
+.post-tools-panel .tool-button:active {
+  transform: translateY(0);
+  box-shadow: inset 0 1px 2px 0 rgba(0,0,0,0.05);
+}
+
 .post-tools-panel .tool-button i {
-  width: 18px;
-  height: 18px;
-  stroke-width: 2;
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5;
 }
-.tool-group > .label {
-  font-size: 14px;
-  color: #6c757d;
-  font-weight: 500;
+
+/* Grup khusus untuk tombol font */
+.font-button-group {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
+.font-button-group .tool-button {
+  border-radius: 0;
+  border-right-width: 0; /* Hapus border kanan untuk semua tombol */
+  border-left-width: 1px;
+}
+.font-button-group .tool-button:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-left-width: 1px; /* Terapkan border kiri hanya untuk yang pertama */
+}
+.font-button-group .tool-button:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-right-width: 1px; /* Terapkan border kanan hanya untuk yang terakhir */
+}
+
+/* Tombol Aksi Utama (Dengarkan & Translate) */
+#play-pause-btn, #custom-translate-btn {
+  background-color: #e53935; /* Warna aksen tema Anda */
+  border-color: #c62828;
+  color: #fff;
+}
+#play-pause-btn:hover, #custom-translate-btn:hover {
+  background-color: #c62828;
+  border-color: #b71c1c;
+}
+
+#stop-btn {
+  background-color: #6b7280;
+  border-color: #4b5563;
+  color: #fff;
+}
+#stop-btn:hover {
+  background-color: #4b5563;
+}
+
+/* Style untuk highlight TTS */
+.tts-highlight {
+    background-color: #fef9c3;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Sembunyikan elemen Google Translate */
 #google_translate_element, .skiptranslate, .goog-te-banner-frame {
     display: none !important;
 }
 body {
     top: 0 !important;
-}
-.tts-highlight {
-    background-color: #fef9c3; /* yellow-100 */
-    transition: background-color 0.3s ease-in-out;
-}
-
-/* ===== CSS Widget Gambar Mewarnai ===== */
-.coloring-widget-container {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
-}
-.coloring-widget-container h3 {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    color: #2c3e50;
-}
-.coloring-widget-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-}
-.coloring-widget-card {
-    display: block;
-    text-decoration: none;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease-in-out;
-}
-.coloring-widget-card:hover {
-    transform: translateY(-4px);
-}
-.coloring-widget-card img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    display: block;
-    border-bottom: 1px solid #eee;
-}
-.coloring-widget-card-title {
-    padding: 10px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #333;
-    background-color: #fff;
-    text-align: center;
-    line-height: 1.4;
-}
-@media (max-width: 768px) {
-    .coloring-widget-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
