@@ -1,5 +1,5 @@
 /* File JavaScript Gabungan untuk iqbalnana.com
-  Versi ini memperbaiki masalah pada Post Tools Panel.
+  Versi ini berisi perbaikan untuk tombol Google Translate dan Post Tools.
 */
 
 // ===== Logika untuk Post Tools Panel (Font, TTS, Translate) =====
@@ -48,15 +48,32 @@ function initializePostTools() {
         });
     }
 
-    // --- LOGIKA TOMBOL TRANSLATE KUSTOM ---
+    // --- LOGIKA TOMBOL TRANSLATE KUSTOM (RELIABLE) ---
     const customTranslateButton = document.getElementById('custom-translate-btn');
-    if (customTranslateButton) {
-        customTranslateButton.addEventListener('click', function() {
-            const langSelector = document.querySelector('.goog-te-combo');
+    const googleTranslateContainer = document.getElementById('google_translate_element');
+
+    if (customTranslateButton && googleTranslateContainer) {
+        const observer = new MutationObserver((mutationsList, obs) => {
+            const langSelector = googleTranslateContainer.querySelector('.goog-te-combo');
             if (langSelector) {
-                langSelector.focus();
-                langSelector.click();
+                customTranslateButton.addEventListener('click', () => {
+                    // Mensimulasikan klik mouse untuk membuka dropdown
+                    const event = new MouseEvent('mousedown', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    langSelector.dispatchEvent(event);
+                });
+                console.log('SUCCESS: Google Translate button listener attached.');
+                obs.disconnect(); // Hentikan pemantauan setelah berhasil
             }
+        });
+
+        // Mulai memantau perubahan pada container Google Translate
+        observer.observe(googleTranslateContainer, {
+            childList: true,
+            subtree: true
         });
     }
 
@@ -77,7 +94,7 @@ function initializePostTools() {
 
     function play() { if (isPaused) { window.speechSynthesis.resume(); isPaused = false; updateButtonState('speaking'); } else { speakNextElement(); } }
     function pause() { window.speechSynthesis.pause(); isPaused = true; updateButtonState('paused'); }
-    function stop() { window.speechSynthesis.cancel(); }
+    function stop() { window.speechSynthesis.cancel(); resetPlayer(); }
 
     function speakNextElement() {
         if (currentElementIndex >= readableElements.length) { resetPlayer(); return; }
@@ -98,6 +115,7 @@ function initializePostTools() {
     function updateButtonState(state) {
         const playPauseIcon = playPauseBtn.querySelector('i');
         const playPauseText = playPauseBtn.querySelector('span');
+        if (!playPauseIcon || !playPauseText) return;
 
         if (state === 'speaking') {
             playPauseIcon.setAttribute('data-lucide', 'pause');
@@ -117,7 +135,7 @@ function initializePostTools() {
 
     playPauseBtn.addEventListener('click', () => { if (isSpeaking && !isPaused) { pause(); } else { play(); } });
     stopBtn.addEventListener('click', () => { stop(); });
-    window.speechSynthesis.onvoiceschanged = () => {}; // Ensure it works on all browsers
+    window.speechSynthesis.onvoiceschanged = () => {};
     window.addEventListener('beforeunload', () => { stop(); });
 }
 
@@ -133,7 +151,7 @@ function printRelatedLabels(a) { for (var b = 0; b < relatedUrls.length; b++) { 
 
 // ===== Multi Related Post Script =====
 function initializeMultiRelated() {
-    if (document.querySelector('.arldzgnMultiRelated')) return; // Run only once
+    if (document.querySelector('.arldzgnMultiRelated')) return;
     var jumlah = 2;
     let post = document.querySelectorAll('.post-body br, .post-body p'),
         a = jumlah + 1,
@@ -187,13 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializePostTools();
     initializeMultiRelated();
     initializeColoringWidget();
-
-    // Sisa skrip tema yang sudah ada (obfuscated) bisa diletakkan di sini
-    // atau dipanggil dari file terpisah jika diinginkan.
-    // Untuk saat ini, kita akan fokus pada fungsionalitas yang diperbaiki.
     
-    // Contoh: Logika menu mobile, back-to-top, dll.
-    // Ini adalah versi sederhana dari logika yang ada di tema Anda
+    // Logika menu mobile, back-to-top, dll.
     var mobMenu = function() {
         $('.mobile-menu-toggle').on('click', function(e) {
             e.preventDefault();
@@ -236,7 +249,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
     
-    // Panggil fungsi-fungsi tersebut
     mobMenu();
     searchNav();
     backTop();
