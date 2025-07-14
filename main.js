@@ -1,8 +1,4 @@
-/**
- * ==================================================================================
- * main.js v.1.0
- * ==================================================================================
- */
+
 
 // 1. ===============================================================================
 //    Widget Gambar Mewarnai
@@ -321,6 +317,27 @@ const advancedRelatedPosts = {
 };
 
 // 7. ===============================================================================
+//    Fungsi Utilitas (Throttle)
+// ==================================================================================
+/**
+ * Mencegah sebuah fungsi dijalankan berulang kali dalam interval waktu tertentu.
+ * @param {Function} func Fungsi yang akan di-throttle.
+ * @param {number} limit Batas waktu dalam milidetik.
+ */
+function throttle(func, limit) {
+  let inThrottle;
+  return function() {
+    const args = arguments;
+    const context = this;
+    if (!inThrottle) {
+      func.apply(context, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  }
+}
+
+// 8. ===============================================================================
 //    Inisialisasi Skrip Utama
 // ==================================================================================
 jQuery(window).on('load', function() {
@@ -333,9 +350,11 @@ jQuery(window).on('load', function() {
         });
     }
 
-    // Inisialisasi Sistem Artikel Terkait Canggih
+    // Inisialisasi Sistem Artikel Terkait Canggih dengan Throttling
     // Hanya berjalan di halaman postingan
     if (document.body.classList.contains('item-post-wrap')) {
-        advancedRelatedPosts.init();
+        // Menerapkan throttle pada fungsi init untuk mencegah eksekusi berulang
+        const throttledRelatedPosts = throttle(advancedRelatedPosts.init.bind(advancedRelatedPosts), 2000);
+        throttledRelatedPosts();
     }
 });
