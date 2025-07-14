@@ -1,25 +1,6 @@
 /**
  * ==================================================================================
- * main.js untuk Tema Blogger (Sistem Related Posts Baru)
- * ==================================================================================
- * Berkas ini berisi gabungan dari berbagai skrip fungsional yang aman untuk
- * di-host secara eksternal, dengan sistem related posts yang canggih.
- *
- * Perubahan Besar:
- * - Menghapus sistem related posts lama yang tidak berfungsi.
- * - Menambahkan Sistem Artikel Terkait Canggih yang menganalisis konten
- * untuk relevansi, menampilkan gambar, dan menggunakan layout grid modern.
- * - Tetap mempertahankan fungsi Sticky Sidebar, Paginasi, TTS, dll.
- * - Semua skrip berat dijalankan setelah halaman selesai dimuat untuk performa optimal.
- *
- * Daftar Isi:
- * 1. Widget Gambar Mewarnai
- * 2. Fungsi Pengatur Ukuran Font
- * 3. Theia Sticky Sidebar v1.7.0
- * 4. Skrip Paginasi (Obfuscated)
- * 5. Fungsi Text-to-Speech (TTS) dan Kontrol Font
- * 6. Sistem Artikel Terkait Canggih (Advanced Related Posts)
- * 7. Inisialisasi Skrip Utama
+ * main.js v.1.0
  * ==================================================================================
  */
 
@@ -220,58 +201,45 @@ document.addEventListener('DOMContentLoaded', () => {
 // 6. ===============================================================================
 //    Sistem Artikel Terkait Canggih (Advanced Related Posts)
 // ==================================================================================
-const iqnaRelatedPosts = {
+const advancedRelatedPosts = {
     // --- Konfigurasi ---
-    maxPosts: 8, // Jumlah maksimal artikel yang ditampilkan (kelipatan 4 untuk grid)
+    maxPosts: 8,
     containerId: 'iqna-related-posts',
     noImage: "https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/s1600/nth.png",
     title: "<h3>Anda Mungkin Juga Suka</h3>",
-    
-    // --- Fungsi Internal ---
-    
-    // Fungsi untuk mengambil kata kunci dari judul dan konten
+
+    // Fungsi untuk mengambil kata kunci dari judul
     getKeywords: function() {
         const postTitle = document.querySelector('h1.post-title') ? document.querySelector('h1.post-title').innerText.toLowerCase() : '';
-        const postBody = document.querySelector('.post-body');
-        let postContent = '';
-        if (postBody) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = postBody.innerHTML;
-            // Hapus elemen yang tidak relevan (opsional, bisa ditambahkan)
-            tempDiv.querySelectorAll('script, style, .arldzgnMultiRelated').forEach(el => el.remove());
-            postContent = tempDiv.innerText.toLowerCase();
-        }
-        
-        // Gabungkan, hapus karakter non-alfanumerik, dan ambil kata unik
-        const allText = postTitle + ' ' + postContent;
-        const words = allText.match(/\b(\w+)\b/g) || [];
-        
-        // Filter kata-kata umum (stopwords) dalam Bahasa Indonesia
         const stopwords = new Set(['di', 'dan', 'yang', 'untuk', 'pada', 'ke', 'dari', 'dengan', 'ini', 'itu', 'adalah', 'dalam', 'juga', 'bisa', 'karena', 'seperti', 'telah', 'akan', 'namun', 'saat', 'sebuah', 'atau', 'lalu', 'saja', 'jika', 'maka', 'sehingga', 'tidak', 'ada', 'memiliki', 'menjadi', 'sebagai', 'saya', 'dia', 'mereka', 'anda', 'kami']);
-        const uniqueKeywords = [...new Set(words.filter(word => word.length > 3 && !stopwords.has(word)))];
-        
-        return uniqueKeywords;
+        const words = postTitle.match(/\b(\w+)\b/g) || [];
+        return [...new Set(words.filter(word => word.length > 3 && !stopwords.has(word)))];
     },
 
     // Fungsi untuk menghitung skor relevansi
-    calculateScore: function(post, keywords) {
+    calculateScore: function(post, keywords, currentLabels) {
         let score = 0;
         const postTitle = post.title.$t.toLowerCase();
-        const postContent = ('content' in post && '$t' in post.content) ? post.content.$t.toLowerCase() : '';
-        
+        const postLabels = post.category ? post.category.map(cat => cat.term) : [];
+
+        // Skor tinggi untuk label yang sama
+        currentLabels.forEach(currentLabel => {
+            if (postLabels.includes(currentLabel)) {
+                score += 10;
+            }
+        });
+
+        // Skor tambahan untuk kata kunci di judul
         keywords.forEach(keyword => {
             if (postTitle.includes(keyword)) {
-                score += 2; // Beri bobot lebih jika ada di judul
-            }
-            if (postContent.includes(keyword)) {
-                score += 1;
+                score += 2;
             }
         });
         return score;
     },
 
     // Fungsi untuk menampilkan hasil
-    display: function(posts, keywords) {
+    display: function(posts, keywords, currentLabels) {
         const container = document.getElementById(this.containerId);
         if (!container) return;
 
@@ -281,7 +249,7 @@ const iqnaRelatedPosts = {
         posts.forEach(post => {
             const postUrl = post.link.find(l => l.rel === 'alternate').href;
             if (postUrl !== currentUrl) {
-                const score = this.calculateScore(post, keywords);
+                const score = this.calculateScore(post, keywords, currentLabels);
                 if (score > 0) {
                     const image = ('media$thumbnail' in post && post.media$thumbnail.url) ? post.media$thumbnail.url.replace(/\/s\d+(-c)?\//, '/s320-c/') : this.noImage;
                     scoredPosts.push({
@@ -294,12 +262,8 @@ const iqnaRelatedPosts = {
             }
         });
 
-        // Hapus duplikat berdasarkan URL
         const uniquePosts = Array.from(new Map(scoredPosts.map(item => [item['url'], item])).values());
-
-        // Urutkan berdasarkan skor tertinggi
         uniquePosts.sort((a, b) => b.score - a.score);
-
         const postsToDisplay = uniquePosts.slice(0, this.maxPosts);
 
         if (postsToDisplay.length === 0) {
@@ -326,48 +290,33 @@ const iqnaRelatedPosts = {
     },
 
     // Fungsi utama untuk memulai proses
-    init: async function() {
+    init: function() {
         const container = document.getElementById(this.containerId);
         if (!container) return;
 
-        const labels = Array.from(document.querySelectorAll('.post-labels a')).map(a => a.innerText);
-        if (labels.length === 0) {
+        const currentLabels = Array.from(document.querySelectorAll('.post-labels a')).map(a => a.innerText);
+        if (currentLabels.length === 0) {
             container.style.display = 'none';
             return;
         }
 
         container.innerHTML = '<p>Mencari artikel terkait...</p>';
         const keywords = this.getKeywords();
-        let allPosts = [];
+        const feedUrl = `/feeds/posts/default?alt=json&max-results=100`;
 
-        const fetchPromises = labels.map(label => {
-            const feedUrl = `/feeds/posts/default/-/${encodeURIComponent(label)}?alt=json-in-script&max-results=50`;
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                const callbackName = 'iqna_json_callback_' + Math.random().toString(36).substr(2, 9);
-                
-                window[callbackName] = (json) => {
-                    if (json.feed.entry) {
-                        allPosts = allPosts.concat(json.feed.entry);
-                    }
-                    resolve();
-                    delete window[callbackName];
-                    document.head.removeChild(script);
-                };
-                
-                script.src = `${feedUrl}&callback=${callbackName}`;
-                script.onerror = reject;
-                document.head.appendChild(script);
+        fetch(feedUrl)
+            .then(response => response.json())
+            .then(json => {
+                if (json.feed && json.feed.entry) {
+                    this.display(json.feed.entry, keywords, currentLabels);
+                } else {
+                    throw new Error("Format feed tidak valid.");
+                }
+            })
+            .catch(error => {
+                console.error("Gagal memuat artikel terkait:", error);
+                container.innerHTML = '<p>Gagal memuat artikel terkait.</p>';
             });
-        });
-
-        try {
-            await Promise.all(fetchPromises);
-            this.display(allPosts, keywords);
-        } catch (error) {
-            console.error("Gagal memuat artikel terkait:", error);
-            container.innerHTML = '<p>Gagal memuat artikel terkait.</p>';
-        }
     }
 };
 
@@ -387,6 +336,6 @@ jQuery(window).on('load', function() {
     // Inisialisasi Sistem Artikel Terkait Canggih
     // Hanya berjalan di halaman postingan
     if (document.body.classList.contains('item-post-wrap')) {
-        iqnaRelatedPosts.init();
+        advancedRelatedPosts.init();
     }
 });
