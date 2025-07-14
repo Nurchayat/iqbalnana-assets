@@ -1,4 +1,26 @@
-
+/**
+ * ==================================================================================
+ * main.js untuk Tema Blogger (Perbaikan Final Artikel Terkait)
+ * ==================================================================================
+ * Berkas ini berisi gabungan dari berbagai skrip fungsional yang aman untuk
+ * di-host secara eksternal, dengan sistem related posts yang baru dan andal.
+ *
+ * Perubahan Besar:
+ * - Mengganti total sistem related posts dengan metode JSON-P yang lebih stabil.
+ * - Logika disederhanakan untuk mengambil postingan dari label pertama,
+ * memastikan relevansi dan keandalan.
+ * - Tetap mempertahankan fungsi Sticky Sidebar, Paginasi, TTS, dll.
+ *
+ * Daftar Isi:
+ * 1. Widget Gambar Mewarnai
+ * 2. Fungsi Pengatur Ukuran Font
+ * 3. Theia Sticky Sidebar v1.7.0
+ * 4. Skrip Paginasi (Obfuscated)
+ * 5. Fungsi Text-to-Speech (TTS) dan Kontrol Font
+ * 6. Sistem Artikel Terkait Baru (Reliable Related Posts)
+ * 7. Inisialisasi Skrip Utama
+ * ==================================================================================
+ */
 
 // 1. ===============================================================================
 //    Widget Gambar Mewarnai
@@ -195,72 +217,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 6. ===============================================================================
-//    Sistem Artikel Terkait Canggih (Advanced Related Posts)
+//    Sistem Artikel Terkait Baru (Reliable Related Posts)
 // ==================================================================================
-const advancedRelatedPosts = {
+const reliableRelatedPosts = {
     // --- Konfigurasi ---
     maxPosts: 8,
     containerId: 'iqna-related-posts',
     noImage: "https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/s1600/nth.png",
     title: "<h3>Anda Mungkin Juga Suka</h3>",
 
-    // Fungsi untuk mengambil kata kunci dari judul
-    getKeywords: function() {
-        const postTitle = document.querySelector('h1.post-title') ? document.querySelector('h1.post-title').innerText.toLowerCase() : '';
-        const stopwords = new Set(['di', 'dan', 'yang', 'untuk', 'pada', 'ke', 'dari', 'dengan', 'ini', 'itu', 'adalah', 'dalam', 'juga', 'bisa', 'karena', 'seperti', 'telah', 'akan', 'namun', 'saat', 'sebuah', 'atau', 'lalu', 'saja', 'jika', 'maka', 'sehingga', 'tidak', 'ada', 'memiliki', 'menjadi', 'sebagai', 'saya', 'dia', 'mereka', 'anda', 'kami']);
-        const words = postTitle.match(/\b(\w+)\b/g) || [];
-        return [...new Set(words.filter(word => word.length > 3 && !stopwords.has(word)))];
-    },
-
-    // Fungsi untuk menghitung skor relevansi
-    calculateScore: function(post, keywords, currentLabels) {
-        let score = 0;
-        const postTitle = post.title.$t.toLowerCase();
-        const postLabels = post.category ? post.category.map(cat => cat.term) : [];
-
-        // Skor tinggi untuk label yang sama
-        currentLabels.forEach(currentLabel => {
-            if (postLabels.includes(currentLabel)) {
-                score += 10;
-            }
-        });
-
-        // Skor tambahan untuk kata kunci di judul
-        keywords.forEach(keyword => {
-            if (postTitle.includes(keyword)) {
-                score += 2;
-            }
-        });
-        return score;
-    },
-
-    // Fungsi untuk menampilkan hasil
-    display: function(posts, keywords, currentLabels) {
+    // --- Fungsi Internal ---
+    
+    // Fungsi untuk menampilkan hasil ke dalam kontainer
+    display: function(posts) {
         const container = document.getElementById(this.containerId);
         if (!container) return;
 
-        const currentUrl = document.querySelector('link[rel="canonical"]').href;
-        let scoredPosts = [];
-
-        posts.forEach(post => {
-            const postUrl = post.link.find(l => l.rel === 'alternate').href;
-            if (postUrl !== currentUrl) {
-                const score = this.calculateScore(post, keywords, currentLabels);
-                if (score > 0) {
-                    const image = ('media$thumbnail' in post && post.media$thumbnail.url) ? post.media$thumbnail.url.replace(/\/s\d+(-c)?\//, '/s320-c/') : this.noImage;
-                    scoredPosts.push({
-                        url: postUrl,
-                        title: post.title.$t,
-                        image: image,
-                        score: score
-                    });
-                }
-            }
-        });
-
-        const uniquePosts = Array.from(new Map(scoredPosts.map(item => [item['url'], item])).values());
-        uniquePosts.sort((a, b) => b.score - a.score);
-        const postsToDisplay = uniquePosts.slice(0, this.maxPosts);
+        const postsToDisplay = posts.slice(0, this.maxPosts);
 
         if (postsToDisplay.length === 0) {
             container.style.display = 'none';
@@ -270,10 +243,11 @@ const advancedRelatedPosts = {
         let html = this.title;
         html += '<div class="related-posts-grid">';
         postsToDisplay.forEach(post => {
+            const image = post.image ? post.image.replace(/\/s\d+(-c)?\//, '/s320-c/') : this.noImage;
             html += `
                 <a class="related-post-item" href="${post.url}" title="${post.title}">
                     <div class="related-post-thumb-container">
-                        <img class="related-post-thumb" src="${post.image}" alt="${post.title}" loading="lazy" onerror="this.onerror=null;this.src='${this.noImage}';"/>
+                        <img class="related-post-thumb" src="${image}" alt="${post.title}" loading="lazy" onerror="this.onerror=null;this.src='${this.noImage}';"/>
                     </div>
                     <h4 class="related-post-title">${post.title}</h4>
                 </a>
@@ -290,54 +264,57 @@ const advancedRelatedPosts = {
         const container = document.getElementById(this.containerId);
         if (!container) return;
 
-        const currentLabels = Array.from(document.querySelectorAll('.post-labels a')).map(a => a.innerText);
-        if (currentLabels.length === 0) {
+        const firstLabelEl = document.querySelector('.post-labels a');
+        if (!firstLabelEl) {
+            console.log('Related Posts: No labels found on this post.');
             container.style.display = 'none';
             return;
         }
 
-        container.innerHTML = '<p>Mencari artikel terkait...</p>';
-        const keywords = this.getKeywords();
-        const feedUrl = `/feeds/posts/default?alt=json&max-results=100`;
+        const firstLabel = firstLabelEl.innerText;
+        const currentUrl = document.querySelector('link[rel="canonical"]').href;
+        const feedUrl = `/feeds/posts/default/-/${encodeURIComponent(firstLabel)}?alt=json-in-script&max-results=10`;
 
-        fetch(feedUrl)
-            .then(response => response.json())
-            .then(json => {
-                if (json.feed && json.feed.entry) {
-                    this.display(json.feed.entry, keywords, currentLabels);
-                } else {
-                    throw new Error("Format feed tidak valid.");
-                }
-            })
-            .catch(error => {
-                console.error("Gagal memuat artikel terkait:", error);
-                container.innerHTML = '<p>Gagal memuat artikel terkait.</p>';
-            });
+        // Definisikan callback function secara global
+        const callbackName = 'iqnaRelatedCallback';
+        window[callbackName] = (json) => {
+            if (!json.feed || !json.feed.entry || json.feed.entry.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            let allPosts = json.feed.entry
+                .map(entry => {
+                    return {
+                        url: entry.link.find(l => l.rel === 'alternate').href,
+                        title: entry.title.$t,
+                        image: ('media$thumbnail' in entry) ? entry.media$thumbnail.url : null
+                    };
+                })
+                .filter(post => post.url !== currentUrl); // Filter postingan saat ini
+            
+            // Acak urutan postingan
+            allPosts.sort(() => Math.random() - 0.5);
+
+            this.display(allPosts);
+
+            // Bersihkan setelah selesai
+            delete window[callbackName];
+            const scriptTag = document.getElementById('related-posts-script');
+            if (scriptTag) {
+                scriptTag.parentNode.removeChild(scriptTag);
+            }
+        };
+
+        // Buat dan tambahkan tag script untuk memanggil feed
+        const script = document.createElement('script');
+        script.id = 'related-posts-script';
+        script.src = `${feedUrl}&callback=${callbackName}`;
+        document.head.appendChild(script);
     }
 };
 
 // 7. ===============================================================================
-//    Fungsi Utilitas (Throttle)
-// ==================================================================================
-/**
- * Mencegah sebuah fungsi dijalankan berulang kali dalam interval waktu tertentu.
- * @param {Function} func Fungsi yang akan di-throttle.
- * @param {number} limit Batas waktu dalam milidetik.
- */
-function throttle(func, limit) {
-  let inThrottle;
-  return function() {
-    const args = arguments;
-    const context = this;
-    if (!inThrottle) {
-      func.apply(context, args);
-      inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
-    }
-  }
-}
-
-// 8. ===============================================================================
 //    Inisialisasi Skrip Utama
 // ==================================================================================
 jQuery(window).on('load', function() {
@@ -350,11 +327,9 @@ jQuery(window).on('load', function() {
         });
     }
 
-    // Inisialisasi Sistem Artikel Terkait Canggih dengan Throttling
+    // Inisialisasi Sistem Artikel Terkait Baru
     // Hanya berjalan di halaman postingan
     if (document.body.classList.contains('item-post-wrap')) {
-        // Menerapkan throttle pada fungsi init untuk mencegah eksekusi berulang
-        const throttledRelatedPosts = throttle(advancedRelatedPosts.init.bind(advancedRelatedPosts), 2000);
-        throttledRelatedPosts();
+        reliableRelatedPosts.init();
     }
 });
