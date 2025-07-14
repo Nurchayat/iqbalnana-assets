@@ -519,3 +519,69 @@ ul.related-posts{display:flex;flex-wrap:wrap}
 .breadcrumb-container span.separator{margin:0 8px;color:#999;}
 .breadcrumb-container span.current-page{color:#777;}
 /*-- Akhir CSS Breadcrumb --*/
+
+/* --- Advanced Related Posts --- */
+.related-posts-container {
+  margin: 30px 0;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+.related-posts-container h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+.related-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+.related-post-item {
+  display: block;
+  text-decoration: none;
+  color: #333;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.related-post-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.related-post-thumb-container {
+  width: 100%;
+  padding-top: 60%; /* Aspect Ratio 5:3 */
+  position: relative;
+  background-color: #f0f0f0;
+}
+.related-post-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Memastikan gambar memenuhi area tanpa distorsi */
+  border-bottom: 1px solid #eee;
+}
+.related-post-title {
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 12px;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Responsive untuk layar lebih kecil */
+@media (max-width: 768px) {
+  .related-posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .related-posts-grid {
+    grid-template-columns: 1fr; /* Satu kolom di layar sangat kecil */
+  }
+}
+
