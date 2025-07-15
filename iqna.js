@@ -126,7 +126,7 @@ function initializeTTSSystem() {
 //    Sistem Artikel Terkait Baru (Reliable Related Posts)
 // ==================================================================================
 const reliableRelatedPosts = {
-    maxPosts: 8,
+    maxPosts: 6,
     containerId: 'iqna-related-posts',
     noImage: "https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/s1600/nth.png",
     title: "<h3>Anda Mungkin Juga Suka</h3>",
