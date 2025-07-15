@@ -1,6 +1,6 @@
 /**
  * ==================================================================================
- * Skrip Gabungan untuk Tema Blogger Iqbalnana
+ * Skrip Gabungan untuk Tema Blogger Iqbalnana (v2 - Perbaikan Artikel Terkait)
  * ==================================================================================
  * Berkas ini berisi gabungan dari berbagai skrip fungsional yang telah dioptimalkan
  * untuk menghindari konflik dan meningkatkan performa.
@@ -260,8 +260,9 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeTTSSystem();
     initializeUtilities();
 
-    // Inisialisasi Sistem Artikel Terkait Baru (hanya di halaman postingan)
-    if (document.body.classList.contains('item-post-wrap')) {
+    // Inisialisasi Artikel Terkait (hanya di halaman postingan)
+    // **[PERBAIKAN]** Mengecek keberadaan elemen .item-post-wrap, bukan class di body.
+    if (document.querySelector('.item-post-wrap')) {
         reliableRelatedPosts.init();
     }
 });
