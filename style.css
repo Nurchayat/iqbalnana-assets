@@ -9,3 +9,109 @@
 .post-body ul li {
     list-style: none;
 }
+/* Homepage Layout Styling */
+.homepage-layout {
+  width: 100%;
+}
+.homepage-section {
+  margin-bottom: 35px;
+}
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #f0f0f0;
+  color: #333;
+}
+.post-grid-container {
+  display: grid;
+  gap: 20px;
+}
+
+/* Grid untuk kedua seksi */
+#dongeng-anak-grid,
+#gambar-mewarnai-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Styling untuk setiap item postingan di grid */
+.grid-post-item {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #333;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.grid-post-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+.grid-post-thumb-container {
+  width: 100%;
+  padding-top: 65%; /* Aspect Ratio */
+  position: relative;
+  background-color: #f5f5f5;
+}
+.grid-post-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Memastikan gambar memenuhi area tanpa distorsi */
+}
+.grid-post-title {
+  font-size: 16px;
+  line-height: 1.4;
+  padding: 15px;
+  margin: 0;
+  font-weight: 600;
+  flex-grow: 1;
+}
+
+/* Tombol Paginasi Kustom */
+.homepage-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 40px;
+}
+.pagination-button {
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: #ff8466; /* Warna utama tema Anda */
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+.pagination-button:hover {
+  background-color: #141414; /* Warna gelap tema Anda */
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  #dongeng-anak-grid,
+  #gambar-mewarnai-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 580px) {
+  #dongeng-anak-grid,
+  #gambar-mewarnai-grid {
+    grid-template-columns: 1fr;
+  }
+  .homepage-pagination {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+}
