@@ -277,3 +277,109 @@ jQuery(window).on('load', function() {
         });
     }
 });
+
+// 1. ===============================================================================
+//    Logika Homepage Kustom untuk Label "Dongeng Anak"
+// ==================================================================================
+function initializeHomepageDongeng() {
+    // Hanya jalankan jika ini adalah halaman utama
+    if (document.body.classList.contains('home')) {
+        
+        const config = {
+            label: "Dongeng Anak",
+            postsPerPage: 6,
+            containerId: "dongeng-homepage-container",
+            noImage: "https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/s1600/nth.png",
+            pagerText: {
+                newer: '‹ Halaman Baru',
+                older: 'Halaman Lama ›'
+            }
+        };
+
+        const container = document.getElementById(config.containerId);
+        if (!container) {
+            console.error(`Error: Container dengan ID #${config.containerId} tidak ditemukan.`);
+            return;
+        }
+
+        function getPageParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return parseInt(urlParams.get('page') || '1', 10);
+        }
+
+        function renderPagination(totalPosts, currentPage) {
+            const totalPages = Math.ceil(totalPosts / config.postsPerPage);
+            if (totalPages <= 1) return '';
+
+            let paginationHtml = '<div class="blog-pager" id="blog-pager">';
+            
+            if (currentPage > 1) {
+                const prevPageUrl = (currentPage === 2) ? '/' : `/?page=${currentPage - 1}`;
+                paginationHtml += `<a class="blog-pager-newer-link" href="${prevPageUrl}">${config.pagerText.newer}</a>`;
+            }
+
+            if (currentPage < totalPages) {
+                paginationHtml += `<a class="blog-pager-older-link" href="/?page=${currentPage + 1}">${config.pagerText.older}</a>`;
+            }
+
+            paginationHtml += '</div>';
+            return paginationHtml;
+        }
+
+        function renderPosts(json) {
+            if (!json.feed || !json.feed.entry || json.feed.entry.length === 0) {
+                container.innerHTML = "<p style='text-align:center;'>Tidak ada dongeng untuk ditampilkan.</p>";
+                return;
+            }
+
+            const totalPosts = parseInt(json.feed.openSearch$totalResults.$t, 10);
+            const currentPage = getPageParam();
+            
+            let postsHtml = '<div class="index-post-wrap">';
+            
+            json.feed.entry.forEach(entry => {
+                const post = {
+                    title: entry.title.$t,
+                    url: (entry.link.find(link => link.rel === 'alternate') || {}).href,
+                    image: ('media$thumbnail' in entry) ? entry.media$thumbnail.url.replace(/\/s\d+(-c)?\//, '/w400-h260-c/') : config.noImage
+                };
+
+                postsHtml += `
+                    <div class="index-post">
+                        <div class="post-image-wrap">
+                            <a class="post-image-link" href="${post.url}" title="${post.title}">
+                                <img class="post-thumb" src="${post.image}" alt="${post.title}" loading="lazy" onerror="this.onerror=null;this.src='${config.noImage}';"/>
+                            </a>
+                            <h2 class="post-title">
+                                <a href="${post.url}">${post.title}</a>
+                            </h2>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            postsHtml += '</div>';
+            const paginationHtml = renderPagination(totalPosts, currentPage);
+            container.innerHTML = postsHtml + paginationHtml;
+        }
+
+        function loadDongengPosts() {
+            const page = getPageParam();
+            const startIndex = (page - 1) * config.postsPerPage + 1;
+            const feedUrl = `/feeds/posts/default/-/${encodeURIComponent(config.label)}?alt=json-in-script&start-index=${startIndex}&max-results=${config.postsPerPage}&callback=dongengCallback`;
+            
+            window.dongengCallback = function(json) {
+                renderPosts(json);
+                const scriptTag = document.getElementById('dongeng-feed-script');
+                if (scriptTag) scriptTag.parentNode.removeChild(scriptTag);
+                delete window.dongengCallback;
+            };
+
+            const script = document.createElement('script');
+            script.id = 'dongeng-feed-script';
+            script.src = feedUrl;
+            document.head.appendChild(script);
+        }
+        loadDongengPosts();
+    }
+}
