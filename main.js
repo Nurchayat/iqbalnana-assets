@@ -174,42 +174,43 @@ document.addEventListener('DOMContentLoaded', () => {
 const homepageLayout = {
     noImage: "https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/s1600/nth.png",
     
-    // Fungsi untuk mengambil postingan berdasarkan label
     fetchPostsByLabel: function(label, count, containerId) {
         const container = document.getElementById(containerId);
-        if (!container) return;
+        if (!container) {
+            console.error('Container not found:', containerId);
+            return;
+        }
         
         container.innerHTML = '<p style="text-align:center;">Memuat...</p>';
         const feedUrl = `/feeds/posts/default/-/${encodeURIComponent(label)}?alt=json-in-script&max-results=${count}`;
-        
-        // Buat nama callback yang unik untuk menghindari konflik
         const callbackName = 'callback_' + containerId.replace(/-/g, '_');
         
         window[callbackName] = (json) => {
             let html = '';
             if (json.feed && json.feed.entry && json.feed.entry.length > 0) {
                 json.feed.entry.forEach(entry => {
-                    const postUrl = entry.link.find(l => l.rel === 'alternate').href;
+                    const postUrl = (entry.link.find(l => l.rel === 'alternate') || {}).href;
                     const postTitle = entry.title.$t;
                     const image = ('media$thumbnail' in entry && entry.media$thumbnail.url) 
                         ? entry.media$thumbnail.url.replace(/\/s\d+(-c)?\//, '/s400-c/') 
                         : this.noImage;
                     
-                    html += `
-                        <a class="grid-post-item" href="${postUrl}" title="${postTitle}">
-                            <div class="grid-post-thumb-container">
-                                <img class="grid-post-thumb" src="${image}" alt="${postTitle}" loading="lazy" onerror="this.onerror=null;this.src='${this.noImage}';"/>
-                            </div>
-                            <h3 class="grid-post-title">${postTitle}</h3>
-                        </a>
-                    `;
+                    if (postUrl) {
+                        html += `
+                            <a class="grid-post-item" href="${postUrl}" title="${postTitle}">
+                                <div class="grid-post-thumb-container">
+                                    <img class="grid-post-thumb" src="${image}" alt="${postTitle}" loading="lazy" onerror="this.onerror=null;this.src='${this.noImage}';"/>
+                                </div>
+                                <h3 class="grid-post-title">${postTitle}</h3>
+                            </a>
+                        `;
+                    }
                 });
             } else {
                 html = `<p style="text-align:center;">Tidak ada postingan di kategori "${label}".</p>`;
             }
             container.innerHTML = html;
 
-            // Bersihkan callback function setelah selesai
             delete window[callbackName];
             const scriptTag = document.getElementById('script_' + callbackName);
             if (scriptTag) {
@@ -223,7 +224,6 @@ const homepageLayout = {
         document.head.appendChild(script);
     },
 
-    // Fungsi untuk menginisialisasi semua bagian homepage
     init: function() {
         this.fetchPostsByLabel('Dongeng Anak', 6, 'dongeng-anak-grid');
         this.fetchPostsByLabel('Mewarnai Gambar', 6, 'gambar-mewarnai-grid');
@@ -233,18 +233,17 @@ const homepageLayout = {
 // 6. ===============================================================================
 //    Inisialisasi Skrip Utama
 // ==================================================================================
-jQuery(document).ready(function($) {
-    // Inisialisasi Sticky Sidebar
-    if (typeof fixedSidebar !== 'undefined' && fixedSidebar === true && window.innerWidth > 991) {
-        $('#sidebar-wrapper').theiaStickySidebar({
+document.addEventListener('DOMContentLoaded', function() {
+    // Inisialisasi jQuery plugins seperti Sticky Sidebar
+    if (typeof jQuery !== 'undefined' && typeof fixedSidebar !== 'undefined' && fixedSidebar === true && window.innerWidth > 991) {
+        jQuery('#sidebar-wrapper').theiaStickySidebar({
             additionalMarginTop: 20,
             additionalMarginBottom: 20
         });
     }
 
     // Inisialisasi Tata Letak Homepage Kustom
-    // Hanya berjalan jika elemen dengan ID 'homepage-layout' ada
-    if ($('.homepage-layout').length > 0) {
+    if (document.querySelector('.homepage-layout')) {
         homepageLayout.init();
     }
 });
