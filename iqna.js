@@ -1,3 +1,22 @@
+/**
+ * ==================================================================================
+ * Skrip Gabungan untuk Tema Blogger Iqbalnana (v2 - Perbaikan Artikel Terkait)
+ * ==================================================================================
+ * Berkas ini berisi gabungan dari berbagai skrip fungsional yang telah dioptimalkan
+ * untuk menghindari konflik dan meningkatkan performa.
+ *
+ * Daftar Isi:
+ * 1. Widget Gambar Mewarnai
+ * 2. Fungsi Pengatur Ukuran Font
+ * 3. Theia Sticky Sidebar v1.7.0 (Plugin jQuery)
+ * 4. Skrip Paginasi (Obfuscated)
+ * 5. Fungsi Text-to-Speech (TTS) dan Kontrol Font
+ * 6. Sistem Artikel Terkait (Reliable Related Posts)
+ * 7. Skrip Utilitas SEO & Gambar (Alt, Title, Lazyload, Noopener)
+ * 8. Fungsi UI Tema (Menu Mobile, Pencarian, Back to Top)
+ * 9. Inisialisasi Skrip Utama
+ * ==================================================================================
+ */
 
 // 1. ===============================================================================
 //    Widget Gambar Mewarnai
@@ -258,4 +277,3 @@ jQuery(window).on('load', function() {
         });
     }
 });
-
