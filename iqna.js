@@ -1,4 +1,4 @@
-<script type='text/javascript'>
+
 //<![CDATA[
 /**
  * ==================================================================================
@@ -298,5 +298,4 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
-//]]>
-</script>
+
