@@ -2,12 +2,14 @@
 //<![CDATA[
 /**
  * ==================================================================================
- * Skrip Final Gabungan untuk Tema Blogger Iqbalnana (v4 - All-in-One)
+ * Skrip Final Gabungan untuk Tema Blogger Iqbalnana (v5 - All-in-One & Stable)
  * ==================================================================================
  * Berkas ini berisi semua fungsionalitas JavaScript yang diperlukan, termasuk:
  * - Logika Homepage Kustom untuk label "Dongeng Anak".
  * - Fungsi UI Tema Asli (Menu, Pencarian, Back-to-Top) dari themefunction.js.
  * - Utilitas SEO & Gambar dari iqna.js.
+ * - Sistem Artikel Terkait Modern untuk halaman postingan.
+ * - Sistem TTS (Text-to-Speech).
  *
  * Ini adalah satu-satunya file skrip utama yang perlu Anda muat.
  * ==================================================================================
@@ -162,12 +164,78 @@ function initializeUtilities() {
 }
 
 // 3. ===============================================================================
+//    Sistem Artikel Terkait Modern (untuk Halaman Postingan)
+// ==================================================================================
+const reliableRelatedPosts = {
+    maxPosts: 6,
+    containerId: 'iqna-related-posts',
+    noImage: "https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/s1600/nth.png",
+    title: "<h3>Anda Mungkin Juga Suka</h3>",
+    display: function(posts) {
+        const container = document.getElementById(this.containerId);
+        if (!container) return;
+        const postsToDisplay = posts.slice(0, this.maxPosts);
+        if (postsToDisplay.length === 0) { container.style.display = 'none'; return; }
+        let html = this.title;
+        html += '<div class="related-posts-grid">';
+        postsToDisplay.forEach(post => {
+            const image = post.image ? post.image.replace(/\/s\d+(-c)?\//, '/s320-c/') : this.noImage;
+            html += `
+                <a class="related-post-item" href="${post.url}" title="${post.title}">
+                    <div class="related-post-thumb-container">
+                        <img class="related-post-thumb" src="${image}" alt="${post.title}" loading="lazy" onerror="this.onerror=null;this.src='${this.noImage}';"/>
+                    </div>
+                    <h4 class="related-post-title">${post.title}</h4>
+                </a>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+        container.style.display = 'block';
+    },
+    init: function() {
+        const container = document.getElementById(this.containerId);
+        if (!container) return;
+        const firstLabelEl = document.querySelector('.post-labels a');
+        if (!firstLabelEl) { container.style.display = 'none'; return; }
+        const firstLabel = firstLabelEl.innerText;
+        const currentUrlEl = document.querySelector('link[rel="canonical"]');
+        if (!currentUrlEl) { container.style.display = 'none'; return; }
+        const currentUrl = currentUrlEl.href;
+        const feedUrl = `/feeds/posts/default/-/${encodeURIComponent(firstLabel)}?alt=json-in-script&max-results=10`;
+        const callbackName = 'iqnaRelatedCallback';
+        window[callbackName] = (json) => {
+            if (!json.feed || !json.feed.entry || json.feed.entry.length === 0) { container.style.display = 'none'; return; }
+            let allPosts = json.feed.entry
+                .map(entry => ({ url: (entry.link.find(l => l.rel === 'alternate') || {}).href, title: entry.title.$t, image: ('media$thumbnail' in entry) ? entry.media$thumbnail.url : null }))
+                .filter(post => post.url && post.url !== currentUrl);
+            allPosts.sort(() => Math.random() - 0.5);
+            this.display(allPosts);
+            delete window[callbackName];
+            const scriptTag = document.getElementById('related-posts-script');
+            if (scriptTag) scriptTag.parentNode.removeChild(scriptTag);
+        };
+        const script = document.createElement('script');
+        script.id = 'related-posts-script';
+        script.src = `${feedUrl}&callback=${callbackName}`;
+        document.head.appendChild(script);
+    }
+};
+
+// 4. ===============================================================================
 //    Inisialisasi Utama
 // ==================================================================================
 document.addEventListener("DOMContentLoaded", function () {
+    // Jalankan skrip yang tidak butuh jQuery
     initializeHomepageDongeng();
     initializeUtilities();
     
+    // Jalankan artikel terkait jika ini halaman postingan
+    if (document.querySelector('.item-post-wrap')) {
+        reliableRelatedPosts.init();
+    }
+    
+    // Jalankan skrip yang butuh jQuery setelah jQuery siap
     runWhenJQueryIsReady(function($) {
         // Skrip Asli dari themefunction.js (sudah di-deobfuscate)
         // Ini akan menangani UI seperti menu mobile, pencarian, dan back-to-top
