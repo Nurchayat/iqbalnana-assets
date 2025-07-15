@@ -2,14 +2,16 @@
 //<![CDATA[
 /**
  * ==================================================================================
- * Skrip Final Gabungan untuk Tema Blogger Iqbalnana (v5 - All-in-One & Stable)
+ * Skrip Final Gabungan untuk Tema Blogger Iqbalnana (v6 - All-in-One & Stable)
  * ==================================================================================
  * Berkas ini berisi semua fungsionalitas JavaScript yang diperlukan, termasuk:
  * - Logika Homepage Kustom untuk label "Dongeng Anak".
- * - Fungsi UI Tema Asli (Menu, Pencarian, Back-to-Top) dari themefunction.js.
- * - Utilitas SEO & Gambar dari iqna.js.
+ * - Fungsi UI Tema Asli (Menu, Pencarian, Back-to-Top).
+ * - Utilitas SEO & Gambar (Alt text, lazyload, dll).
  * - Sistem Artikel Terkait Modern untuk halaman postingan.
+ * - Widget Gambar Mewarnai.
  * - Sistem TTS (Text-to-Speech).
+ * - Sticky Sidebar.
  *
  * Ini adalah satu-satunya file skrip utama yang perlu Anda muat.
  * ==================================================================================
@@ -76,7 +78,7 @@ function initializeHomepageDongeng() {
                 const post = {
                     title: entry.title.$t,
                     url: (entry.link.find(link => link.rel === 'alternate') || {}).href,
-                    image: ('media$thumbnail' in entry) ? entry.media$thumbnail.url.replace(/\/s\d+(-c)?\//, '/s320-c/') : config.noImage
+                    image: ('media$thumbnail' in entry) ? entry.media$thumbnail.url.replace(/\/s\d+(-c)?\//, '/w400-h260-c/') : config.noImage
                 };
                 postsHtml += `
                     <div class="index-post">
@@ -223,12 +225,43 @@ const reliableRelatedPosts = {
 };
 
 // 4. ===============================================================================
+//    Widget Gambar Mewarnai
+// ==================================================================================
+function initializeColoringWidget() {
+  const container = document.getElementById('coloring-widget-grid');
+  if (!container) return;
+  const dataSourceUrl = 'https://amp.iqbalnana.com/mewarnai/search-index.json';
+  const coloringSiteBaseUrl = 'https://amp.iqbalnana.com';
+  fetch(dataSourceUrl)
+    .then(response => { if (!response.ok) { throw new Error('Gagal mengambil data: ' + response.status); } return response.json(); })
+    .then(data => {
+      if (!data || !Array.isArray(data) || data.length === 0) { container.innerHTML = '<p>Tidak ada gambar.</p>'; return; }
+      const latestImages = data.slice(0, 4);
+      container.innerHTML = '';
+      latestImages.forEach(image => {
+        const fullUrl = coloringSiteBaseUrl + image.url;
+        const fullThumbnailUrl = coloringSiteBaseUrl + image.thumbnail;
+        const card = document.createElement('a');
+        card.href = fullUrl;
+        card.className = 'coloring-widget-card';
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.title = image.title;
+        card.innerHTML = `<img src="${fullThumbnailUrl}" alt="${image.title}" loading="lazy" /><div class="coloring-widget-card-title">${image.title}</div>`;
+        container.appendChild(card);
+      });
+    })
+    .catch(error => { console.error('Error widget mewarnai:', error); container.innerHTML = '<p>Gagal memuat gambar.</p>'; });
+}
+
+// 5. ===============================================================================
 //    Inisialisasi Utama
 // ==================================================================================
 document.addEventListener("DOMContentLoaded", function () {
     // Jalankan skrip yang tidak butuh jQuery
     initializeHomepageDongeng();
     initializeUtilities();
+    initializeColoringWidget();
     
     // Jalankan artikel terkait jika ini halaman postingan
     if (document.querySelector('.item-post-wrap')) {
@@ -237,51 +270,32 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Jalankan skrip yang butuh jQuery setelah jQuery siap
     runWhenJQueryIsReady(function($) {
-        // Skrip Asli dari themefunction.js (sudah di-deobfuscate)
-        // Ini akan menangani UI seperti menu mobile, pencarian, dan back-to-top
+        // Skrip Asli dari themefunction.js
         var mobMenu = function() {
-            $('.mobile-menu-toggle').on('click', function(e) {
-                e.preventDefault();
-                $('body').toggleClass('nav-active');
-                $('.overlay').fadeToggle('fast');
-            });
-            $('.overlay').on('click', function() {
-                $('body').removeClass('nav-active');
-                $(this).fadeOut('fast');
-            });
+            $('.mobile-menu-toggle').on('click', function(e) { e.preventDefault(); $('body').toggleClass('nav-active'); $('.overlay').fadeToggle('fast'); });
+            $('.overlay').on('click', function() { $('body').removeClass('nav-active'); $(this).fadeOut('fast'); });
             $('.mobile-menu .m-sub').hide();
-            $('.mobile-menu .has-sub > a').on('click', function(e) {
-                e.preventDefault();
-                $(this).parent().toggleClass('show');
-                $(this).next('.m-sub').slideToggle('fast');
-            });
+            $('.mobile-menu .has-sub > a').on('click', function(e) { e.preventDefault(); $(this).parent().toggleClass('show'); $(this).next('.m-sub').slideToggle('fast'); });
         };
         var searchNav = function() {
-            $('.show-search').on('click', function(e) {
-                e.preventDefault();
-                $('body').toggleClass('search-active');
-                $('#nav-search').fadeToggle('fast');
-            });
+            $('.show-search').on('click', function(e) { e.preventDefault(); $('body').toggleClass('search-active'); $('#nav-search').fadeToggle('fast'); });
         };
         var backTop = function() {
-            $(window).on('scroll', function() {
-                if ($(this).scrollTop() > 100) {
-                    $('.back-top').fadeIn('fast');
-                } else {
-                    $('.back-top').fadeOut('fast');
-                }
-            });
-            $('.back-top').on('click', function() {
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 800);
-                return false;
-            });
+            $(window).on('scroll', function() { if ($(this).scrollTop() > 100) { $('.back-top').fadeIn('fast'); } else { $('.back-top').fadeOut('fast'); } });
+            $('.back-top').on('click', function() { $('html, body').animate({ scrollTop: 0 }, 800); return false; });
         };
 
         mobMenu();
         searchNav();
         backTop();
+
+        // Inisialisasi Sticky Sidebar
+        if (typeof fixedSidebar !== 'undefined' && fixedSidebar === true && window.innerWidth > 991) {
+            $('#sidebar-wrapper').theiaStickySidebar({
+                additionalMarginTop: 20,
+                additionalMarginBottom: 20
+            });
+        }
     });
 });
 //]]>
