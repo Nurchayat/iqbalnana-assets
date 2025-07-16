@@ -97,7 +97,199 @@
 // 4. ===============================================================================
 //    Skrip Paginasi (Obfuscated)
 // ==================================================================================
-var postResults=postPerPage; var numOfPages=2; var pageOf=["Page", "of"]; eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('5 K;5 m;5 l;5 w;5 s=1p.9;5 y="/";1d();G 1b(a){5 b=\'\';J=M(W/2);4(J==W-J){W=J*2+1}D=l-J;4(D<1)D=1;j=M(a/n)+1;4(j-1==a/n)j=j-1;E=D+W-1;4(E>j)E=j;b+=\'<C 6="3-1u">\'+17[0]+\' \'+l+\' \'+17[1]+\' \'+j+\'</C>\';5 c=M(l)-1;4(l>1){4(l==2){4(m==\'3\'){b+=\'<a 6="3-7 3-U" 9="\'+y+\'"></a>\'}h{b+=\'<a 6="3-7 3-U" 9="/v/u/\'+w+\'?&i-o=\'+n+\'"></a>\'}}h{4(m==\'3\'){b+=\'<a 6="3-7 3-U" 9="#" z="L(\'+c+\');B x"></a>\'}h{b+=\'<a 6="3-7 3-U" 9="#" z="I(\'+c+\');B x"></a>\'}}}4(D>1){4(m=="3"){b+=\'<a 6="3-7" 9="\'+y+\'">1</a>\'}h{b+=\'<a 6="3-7" 9="/v/u/\'+w+\'?&i-o=\'+n+\'">1</a>\'}}4(D>2){b+=\'<C 6="3-7 3-16">...</C>\'}1a(5 d=D;d<=E;d++){4(l==d){b+=\'<C 6="3-7 3-1v">\'+d+\'</C>\'}h 4(d==1){4(m==\'3\'){b+=\'<a 6="3-7" 9="\'+y+\'">1</a>\'}h{b+=\'<a 6="3-7" 9="/v/u/\'+w+\'?&i-o=\'+n+\'">1</a>\'}}h{4(m==\'3\'){b+=\'<a 6="3-7" 9="#" z="L(\'+d+\');B x">\'+d+\'</a>\'}h{b+=\'<a 6="3-7" 9="#" z="I(\'+d+\');B x">\'+d+\'</a>\'}}}4(E<j-1){b+=\'<C 6="3-7 3-16">...</C>\'}4(E<j){4(m=="3"){b+=\'<a 6="3-7" 9="#" z="L(\'+j+\');B x">\'+j+\'</a>\'}h{b+=\'<a 6="3-7" 9="#" z="I(\'+j+\');B x">\'+j+\'</a>\'}}5 e=M(l)+1;4(l<j){4(m==\'3\'){b+=\'<a 6="3-7 3-15" 9="#" z="L(\'+e+\');B x"></a>\'}h{b+=\'<a 6="3-7 3-15" 9="#" z="I(\'+e+\');B x"></a>\'}}b+=\'\';5 f=A.1s(\'1t\');5 g=A.1r(\'1A-1D\');1a(5 p=0;p<f.O;p++){f[p].1c=b}4(f&&f.O>0){b=\'\'}4(g){g.1c=b}}G 12(a){5 b=a.1f;5 c=M(b.1E$1B.$t,10);1b(c)}G 1d(){5 a=s;4(a.k(\'/v/u/\')!=-1){4(a.k(\'?T-i\')!=-1){w=a.H(a.k(\'/v/u/\')+14,a.k(\'?T-i\'))}h{w=a.H(a.k(\'/v/u/\')+14,a.k(\'?&i\'))}}4(a.k(\'?q=\')==-1&&a.k(\'.1C\')==-1){4(a.k(\'/v/u/\')==-1){m=\'3\';4(s.k(\'#F=\')!=-1){l=s.H(s.k(\'#F=\')+8,s.O)}h{l=1}A.18(\'<r Q=\\\'\'+y+\'P/R/N?i-o=1&X=Y-S-r&V=12\\\'><\\/r>\')}h{m=\'u\';4(a.k(\'&i-o=\')==-1){n=1F}4(s.k(\'#F=\')!=-1){l=s.H(s.k(\'#F=\')+8,s.O)}h{l=1}A.18(\'<r Q="\'+y+\'P/R/N/-/\'+w+\'?X=Y-S-r&V=12&i-o=1" ><\\/r>\')}}}G L(a){Z=(a-1)*n;K=a;5 b=A.1h(\'1q\')[0];5 c=A.1o(\'r\');c.1e=\'1m/1n\';c.1i(\'Q\',y+\'P/R/N?1j-1k=\'+Z+\'&i-o=1&X=Y-S-r&V=13\');b.1l(c)}G I(a){Z=(a-1)*n;K=a;5 b=A.1h(\'1q\')[0];5 c=A.1o(\'r\');c.1e=\'1m/1n\';c.1i(\'Q\',y+\'P/R/N/-/\'+w+\'?1j-1k=\'+Z+\'&i-o=1&X=Y-S-r&V=13\');b.1l(c)}G 13(a){11=a.1f.1x[0];5 b=11.1g.$t.H(0,19)+11.1g.$t.H(1z,1w);5 c=1y(b);4(m==\'3\'){5 d=\'/v?T-i=\'+c+\'&i-o=\'+n+\'#F=\'+K}h{5 d=\'/v/u/\'+w+\'?T-i=\'+c+\'&i-o=\'+n+\'#F=\'+K}1p.9=d}',62,104,'|||page|if|var|class|num||href||||||||else|max|lastPageNo|indexOf|currentPageNo|currentPage|postResults|results|||script|locationUrl||label|search|postLabel|false|home_page|onclick|document|return|span|pageStart|pageEnd|PageNo|function|substring|getLabelPage|pageNumber|noPage|getPage|parseInt|summary|length|feeds|src|posts|in|updated|prev|callback|numOfPages|alt|json|jsonstart||post|dataFeed|findPostDate||next|dots|pageOf|write||for|startPagination|innerHTML|pageCurrentBlogger|type|feed|published|getElementsByTagName|setAttribute|start|index|appendChild|text|javascript|createElement|location|head|getElementById|getElementsByName|pageArea|of|active|29|entry|encodeURIComponent|23|blog|totalResults|html|pager|openSearch|20'.split('|'),0,{}));
+// Konfigurasi Awal (Bisa disesuaikan jika perlu)
+var postResults = 20; // Jumlah postingan per halaman
+var numOfPages = 5; // Jumlah nomor halaman yang ditampilkan (misal: 1, 2, 3, 4, 5)
+var pageOf = ["Hal", "dari"]; // Teks untuk "Halaman 1 dari 10"
+var home_page = "/";
+
+// Variabel Global (Jangan diubah)
+var noPage;
+var currentPage;
+var currentPageNo;
+var postLabel;
+var locationUrl = location.href;
+
+// =======================================================
+// INI BAGIAN YANG DIPERBAIKI
+// Fungsi ini sekarang menggunakan metode modern untuk memuat script
+// =======================================================
+function pageCurrentBlogger() {
+    // Fungsi modern untuk memuat script secara dinamis
+    function loadScript(url) {
+        var script = document.createElement('script');
+        script.src = url;
+        document.head.appendChild(script);
+    }
+
+    var a = locationUrl;
+    if (a.indexOf('/search/label/') != -1) {
+        if (a.indexOf('?updated-max') != -1) {
+            postLabel = a.substring(a.indexOf('/search/label/') + 14, a.indexOf('?updated-max'));
+        } else {
+            postLabel = a.substring(a.indexOf('/search/label/') + 14, a.indexOf('?&max'));
+        }
+    }
+    if (a.indexOf('?q=') == -1 && a.indexOf('.html') == -1) {
+        if (a.indexOf('/search/label/') == -1) {
+            currentPage = 'page';
+            if (locationUrl.indexOf('#PageNo=') != -1) {
+                currentPageNo = locationUrl.substring(locationUrl.indexOf('#PageNo=') + 8, locationUrl.length);
+            } else {
+                currentPageNo = 1;
+            }
+            // Menggunakan metode modern, BUKAN document.write()
+            loadScript(home_page + 'feeds/posts/summary?max-results=1&alt=json-in-script&callback=dataFeed');
+        } else {
+            currentPage = 'label';
+            if (a.indexOf('&max-results=') == -1) {
+                postResults = 20;
+            }
+            if (locationUrl.indexOf('#PageNo=') != -1) {
+                currentPageNo = locationUrl.substring(locationUrl.indexOf('#PageNo=') + 8, locationUrl.length);
+            } else {
+                currentPageNo = 1;
+            }
+            // Menggunakan metode modern, BUKAN document.write()
+            loadScript(home_page + 'feeds/posts/summary/-/' + postLabel + '?alt=json-in-script&callback=dataFeed&max-results=1');
+        }
+    }
+}
+
+// =======================================================
+// BAGIAN DI BAWAH INI TIDAK PERLU DIUBAH
+// =======================================================
+
+// Fungsi untuk menerima data jumlah total post
+function dataFeed(a) {
+    var b = a.feed;
+    var c = parseInt(b.openSearch$totalResults.$t, 10);
+    startPagination(c);
+}
+
+// Fungsi untuk membuat dan menampilkan HTML navigasi halaman
+function startPagination(a) {
+    var b = '';
+    pageNumber = parseInt(numOfPages / 2);
+    if (pageNumber == numOfPages - pageNumber) {
+        numOfPages = pageNumber * 2 + 1
+    }
+    pageStart = currentPageNo - pageNumber;
+    if (pageStart < 1) pageStart = 1;
+    lastPageNo = parseInt(a / postResults) + 1;
+    if (lastPageNo - 1 == a / postResults) lastPageNo = lastPageNo - 1;
+    pageEnd = pageStart + numOfPages - 1;
+    if (pageEnd > lastPageNo) pageEnd = lastPageNo;
+    b += '<span class="page-of">' + pageOf[0] + ' ' + currentPageNo + ' ' + pageOf[1] + ' ' + lastPageNo + '</span>';
+    var c = parseInt(currentPageNo) - 1;
+    if (currentPageNo > 1) {
+        if (currentPageNo == 2) {
+            if (currentPage == 'page') {
+                b += '<a class="page-num page-prev" href="' + home_page + '"></a>'
+            } else {
+                b += '<a class="page-num page-prev" href="/search/label/' + postLabel + '?&max-results=' + postResults + '"></a>'
+            }
+        } else {
+            if (currentPage == 'page') {
+                b += '<a class="page-num page-prev" href="#" onclick="getPage(' + c + ');return false"></a>'
+            } else {
+                b += '<a class="page-num page-prev" href="#" onclick="getLabelPage(' + c + ');return false"></a>'
+            }
+        }
+    }
+    if (pageStart > 1) {
+        if (currentPage == "page") {
+            b += '<a class="page-num" href="' + home_page + '">1</a>'
+        } else {
+            b += '<a class="page-num" href="/search/label/' + postLabel + '?&max-results=' + postResults + '">1</a>'
+        }
+    }
+    if (pageStart > 2) {
+        b += '<span class="page-num page-dots">...</span>'
+    }
+    for (var d = pageStart; d <= pageEnd; d++) {
+        if (currentPageNo == d) {
+            b += '<span class="page-num page-active">' + d + '</span>'
+        } else if (d == 1) {
+            if (currentPage == 'page') {
+                b += '<a class="page-num" href="' + home_page + '">1</a>'
+            } else {
+                b += '<a class="page-num" href="/search/label/' + postLabel + '?&max-results=' + postResults + '">1</a>'
+            }
+        } else {
+            if (currentPage == 'page') {
+                b += '<a class="page-num" href="#" onclick="getPage(' + d + ');return false">' + d + '</a>'
+            } else {
+                b += '<a class="page-num" href="#" onclick="getLabelPage(' + d + ');return false">' + d + '</a>'
+            }
+        }
+    }
+    if (pageEnd < lastPageNo - 1) {
+        b += '<span class="page-num page-dots">...</span>'
+    }
+    if (pageEnd < lastPageNo) {
+        if (currentPage == "page") {
+            b += '<a class="page-num" href="#" onclick="getPage(' + lastPageNo + ');return false">' + lastPageNo + '</a>'
+        } else {
+            b += '<a class="page-num" href="#" onclick="getLabelPage(' + lastPageNo + ');return false">' + lastPageNo + '</a>'
+        }
+    }
+    var e = parseInt(currentPageNo) + 1;
+    if (currentPageNo < lastPageNo) {
+        if (currentPage == 'page') {
+            b += '<a class="page-num page-next" href="#" onclick="getPage(' + e + ');return false"></a>'
+        } else {
+            b += '<a class="page-num page-next" href="#" onclick="getLabelPage(' + e + ');return false"></a>'
+        }
+    }
+    var f = document.getElementsByName('pageArea');
+    var g = document.getElementById('blog-pager');
+    for (var p = 0; p < f.length; p++) {
+        f[p].innerHTML = b
+    }
+    if (f && f.length > 0) {
+        b = ''
+    }
+    if (g) {
+        g.innerHTML = b
+    }
+}
+
+// Fungsi untuk pindah halaman (saat nomor diklik)
+function getPage(a) {
+    jsonstart = (a - 1) * postResults;
+    noPage = a;
+    var b = document.getElementsByTagName('head')[0];
+    var c = document.createElement('script');
+    c.type = 'text/javascript';
+    c.setAttribute('src', home_page + 'feeds/posts/summary?start-index=' + jsonstart + '&max-results=1&alt=json-in-script&callback=findPostDate');
+    b.appendChild(c)
+}
+
+function getLabelPage(a) {
+    jsonstart = (a - 1) * postResults;
+    noPage = a;
+    var b = document.getElementsByTagName('head')[0];
+    var c = document.createElement('script');
+    c.type = 'text/javascript';
+    c.setAttribute('src', home_page + 'feeds/posts/summary/-/' + postLabel + '?start-index=' + jsonstart + '&max-results=1&alt=json-in-script&callback=findPostDate');
+    b.appendChild(c)
+}
+
+function findPostDate(a) {
+    post = a.feed.entry[0];
+    var b = post.published.$t.substring(0, 19) + post.published.$t.substring(23, 29);
+    var c = encodeURIComponent(b);
+    if (currentPage == 'page') {
+        var d = '/search?updated-max=' + c + '&max-results=' + postResults + '#PageNo=' + noPage
+    } else {
+        var d = '/search/label/' + postLabel + '?updated-max=' + c + '&max-results=' + postResults + '#PageNo=' + noPage
+    }
+    location.href = d
+}
+
+// Memulai eksekusi script
+pageCurrentBlogger();
 
 
 // 5. ===============================================================================
