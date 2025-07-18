@@ -333,3 +333,11 @@ jQuery(window).on('load', function() {
         reliableRelatedPosts.init();
     }
 });
+
+  .illustration img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
