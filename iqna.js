@@ -1,27 +1,31 @@
 /**
  * ==================================================================================
- * Skrip Gabungan untuk Tema Blogger Iqbalnana (v2 - Perbaikan Artikel Terkait)
+ * Skrip Gabungan untuk Tema Blogger Iqbalnana (v3 - Perbaikan Inisialisasi)
  * ==================================================================================
  * Berkas ini berisi gabungan dari berbagai skrip fungsional yang telah dioptimalkan
  * untuk menghindari konflik dan meningkatkan performa.
+ *
+ * Perubahan v3:
+ * - Memperbaiki logika inisialisasi untuk Related Posts dan Widget Mewarnai.
+ * - Memastikan setiap modul berjalan secara independen dan hanya saat diperlukan.
  *
  * Daftar Isi:
  * 1. Widget Gambar Mewarnai
  * 2. Fungsi Pengatur Ukuran Font
  * 3. Theia Sticky Sidebar v1.7.0 (Plugin jQuery)
- * 4. Skrip Paginasi (Obfuscated)
- * 5. Fungsi Text-to-Speech (TTS) dan Kontrol Font
+ * 4. Skrip Paginasi
+ * 5. Fungsi Text-to-Speech (TTS)
  * 6. Sistem Artikel Terkait (Reliable Related Posts)
- * 7. Skrip Utilitas SEO & Gambar (Alt, Title, Lazyload, Noopener)
- * 8. Fungsi UI Tema (Menu Mobile, Pencarian, Back to Top)
- * 9. Inisialisasi Skrip Utama
+ * 7. Skrip Utilitas SEO & Gambar
+ * 8. Fungsi UI Tema
+ * 9. Inisialisasi Skrip Utama (Diperbaiki)
  * ==================================================================================
  */
 
 // 1. ===============================================================================
 //    Widget Gambar Mewarnai
 // ==================================================================================
-(function() {
+function initializeColoringWidget() {
   const container = document.getElementById('coloring-widget-grid');
   if (!container) return;
   const dataSourceUrl = 'https://amp.iqbalnana.com/mewarnai/search-index.json';
@@ -61,7 +65,7 @@
       console.error('Error memuat widget gambar mewarnai:', error);
       container.innerHTML = '<p>Gagal memuat gambar. Silakan coba lagi nanti.</p>';
     });
-})();
+}
 
 
 // 2. ===============================================================================
@@ -95,205 +99,20 @@
 
 
 // 4. ===============================================================================
-//    Skrip Paginasi (Obfuscated)
+//    Skrip Paginasi
 // ==================================================================================
-// Konfigurasi Awal (Bisa disesuaikan jika perlu)
-var postResults = 20; // Jumlah postingan per halaman
-var numOfPages = 5; // Jumlah nomor halaman yang ditampilkan (misal: 1, 2, 3, 4, 5)
-var pageOf = ["Hal", "dari"]; // Teks untuk "Halaman 1 dari 10"
+var postResults = 20;
+var numOfPages = 5;
+var pageOf = ["Hal", "dari"];
 var home_page = "/";
-
-// Variabel Global (Jangan diubah)
-var noPage;
-var currentPage;
-var currentPageNo;
-var postLabel;
+var noPage, currentPage, currentPageNo, postLabel;
 var locationUrl = location.href;
 
-// =======================================================
-// INI BAGIAN YANG DIPERBAIKI
-// Fungsi ini sekarang menggunakan metode modern untuk memuat script
-// =======================================================
-function pageCurrentBlogger() {
-    // Fungsi modern untuk memuat script secara dinamis
-    function loadScript(url) {
-        var script = document.createElement('script');
-        script.src = url;
-        document.head.appendChild(script);
-    }
-
-    var a = locationUrl;
-    if (a.indexOf('/search/label/') != -1) {
-        if (a.indexOf('?updated-max') != -1) {
-            postLabel = a.substring(a.indexOf('/search/label/') + 14, a.indexOf('?updated-max'));
-        } else {
-            postLabel = a.substring(a.indexOf('/search/label/') + 14, a.indexOf('?&max'));
-        }
-    }
-    if (a.indexOf('?q=') == -1 && a.indexOf('.html') == -1) {
-        if (a.indexOf('/search/label/') == -1) {
-            currentPage = 'page';
-            if (locationUrl.indexOf('#PageNo=') != -1) {
-                currentPageNo = locationUrl.substring(locationUrl.indexOf('#PageNo=') + 8, locationUrl.length);
-            } else {
-                currentPageNo = 1;
-            }
-            // Menggunakan metode modern, BUKAN document.write()
-            loadScript(home_page + 'feeds/posts/summary?max-results=1&alt=json-in-script&callback=dataFeed');
-        } else {
-            currentPage = 'label';
-            if (a.indexOf('&max-results=') == -1) {
-                postResults = 20;
-            }
-            if (locationUrl.indexOf('#PageNo=') != -1) {
-                currentPageNo = locationUrl.substring(locationUrl.indexOf('#PageNo=') + 8, locationUrl.length);
-            } else {
-                currentPageNo = 1;
-            }
-            // Menggunakan metode modern, BUKAN document.write()
-            loadScript(home_page + 'feeds/posts/summary/-/' + postLabel + '?alt=json-in-script&callback=dataFeed&max-results=1');
-        }
-    }
-}
-
-// =======================================================
-// BAGIAN DI BAWAH INI TIDAK PERLU DIUBAH
-// =======================================================
-
-// Fungsi untuk menerima data jumlah total post
-function dataFeed(a) {
-    var b = a.feed;
-    var c = parseInt(b.openSearch$totalResults.$t, 10);
-    startPagination(c);
-}
-
-// Fungsi untuk membuat dan menampilkan HTML navigasi halaman
-function startPagination(a) {
-    var b = '';
-    pageNumber = parseInt(numOfPages / 2);
-    if (pageNumber == numOfPages - pageNumber) {
-        numOfPages = pageNumber * 2 + 1
-    }
-    pageStart = currentPageNo - pageNumber;
-    if (pageStart < 1) pageStart = 1;
-    lastPageNo = parseInt(a / postResults) + 1;
-    if (lastPageNo - 1 == a / postResults) lastPageNo = lastPageNo - 1;
-    pageEnd = pageStart + numOfPages - 1;
-    if (pageEnd > lastPageNo) pageEnd = lastPageNo;
-    b += '<span class="page-of">' + pageOf[0] + ' ' + currentPageNo + ' ' + pageOf[1] + ' ' + lastPageNo + '</span>';
-    var c = parseInt(currentPageNo) - 1;
-    if (currentPageNo > 1) {
-        if (currentPageNo == 2) {
-            if (currentPage == 'page') {
-                b += '<a class="page-num page-prev" href="' + home_page + '"></a>'
-            } else {
-                b += '<a class="page-num page-prev" href="/search/label/' + postLabel + '?&max-results=' + postResults + '"></a>'
-            }
-        } else {
-            if (currentPage == 'page') {
-                b += '<a class="page-num page-prev" href="#" onclick="getPage(' + c + ');return false"></a>'
-            } else {
-                b += '<a class="page-num page-prev" href="#" onclick="getLabelPage(' + c + ');return false"></a>'
-            }
-        }
-    }
-    if (pageStart > 1) {
-        if (currentPage == "page") {
-            b += '<a class="page-num" href="' + home_page + '">1</a>'
-        } else {
-            b += '<a class="page-num" href="/search/label/' + postLabel + '?&max-results=' + postResults + '">1</a>'
-        }
-    }
-    if (pageStart > 2) {
-        b += '<span class="page-num page-dots">...</span>'
-    }
-    for (var d = pageStart; d <= pageEnd; d++) {
-        if (currentPageNo == d) {
-            b += '<span class="page-num page-active">' + d + '</span>'
-        } else if (d == 1) {
-            if (currentPage == 'page') {
-                b += '<a class="page-num" href="' + home_page + '">1</a>'
-            } else {
-                b += '<a class="page-num" href="/search/label/' + postLabel + '?&max-results=' + postResults + '">1</a>'
-            }
-        } else {
-            if (currentPage == 'page') {
-                b += '<a class="page-num" href="#" onclick="getPage(' + d + ');return false">' + d + '</a>'
-            } else {
-                b += '<a class="page-num" href="#" onclick="getLabelPage(' + d + ');return false">' + d + '</a>'
-            }
-        }
-    }
-    if (pageEnd < lastPageNo - 1) {
-        b += '<span class="page-num page-dots">...</span>'
-    }
-    if (pageEnd < lastPageNo) {
-        if (currentPage == "page") {
-            b += '<a class="page-num" href="#" onclick="getPage(' + lastPageNo + ');return false">' + lastPageNo + '</a>'
-        } else {
-            b += '<a class="page-num" href="#" onclick="getLabelPage(' + lastPageNo + ');return false">' + lastPageNo + '</a>'
-        }
-    }
-    var e = parseInt(currentPageNo) + 1;
-    if (currentPageNo < lastPageNo) {
-        if (currentPage == 'page') {
-            b += '<a class="page-num page-next" href="#" onclick="getPage(' + e + ');return false"></a>'
-        } else {
-            b += '<a class="page-num page-next" href="#" onclick="getLabelPage(' + e + ');return false"></a>'
-        }
-    }
-    var f = document.getElementsByName('pageArea');
-    var g = document.getElementById('blog-pager');
-    for (var p = 0; p < f.length; p++) {
-        f[p].innerHTML = b
-    }
-    if (f && f.length > 0) {
-        b = ''
-    }
-    if (g) {
-        g.innerHTML = b
-    }
-}
-
-// Fungsi untuk pindah halaman (saat nomor diklik)
-function getPage(a) {
-    jsonstart = (a - 1) * postResults;
-    noPage = a;
-    var b = document.getElementsByTagName('head')[0];
-    var c = document.createElement('script');
-    c.type = 'text/javascript';
-    c.setAttribute('src', home_page + 'feeds/posts/summary?start-index=' + jsonstart + '&max-results=1&alt=json-in-script&callback=findPostDate');
-    b.appendChild(c)
-}
-
-function getLabelPage(a) {
-    jsonstart = (a - 1) * postResults;
-    noPage = a;
-    var b = document.getElementsByTagName('head')[0];
-    var c = document.createElement('script');
-    c.type = 'text/javascript';
-    c.setAttribute('src', home_page + 'feeds/posts/summary/-/' + postLabel + '?start-index=' + jsonstart + '&max-results=1&alt=json-in-script&callback=findPostDate');
-    b.appendChild(c)
-}
-
-function findPostDate(a) {
-    post = a.feed.entry[0];
-    var b = post.published.$t.substring(0, 19) + post.published.$t.substring(23, 29);
-    var c = encodeURIComponent(b);
-    if (currentPage == 'page') {
-        var d = '/search?updated-max=' + c + '&max-results=' + postResults + '#PageNo=' + noPage
-    } else {
-        var d = '/search/label/' + postLabel + '?updated-max=' + c + '&max-results=' + postResults + '#PageNo=' + noPage
-    }
-    location.href = d
-}
-
-// Memulai eksekusi script
-pageCurrentBlogger();
+function pageCurrentBlogger(){function a(a){var b=document.createElement("script");b.src=a,document.head.appendChild(b)}var b=locationUrl;-1!=b.indexOf("/search/label/")&&(postLabel=-1!=b.indexOf("?updated-max")?b.substring(b.indexOf("/search/label/")+14,b.indexOf("?updated-max")):b.substring(b.indexOf("/search/label/")+14,b.indexOf("?&max"))),-1==b.indexOf("?q=")&&-1==b.indexOf(".html")&&(-1==b.indexOf("/search/label/")?(currentPage="page",currentPageNo=-1!=locationUrl.indexOf("#PageNo=")?locationUrl.substring(locationUrl.indexOf("#PageNo=")+8,locationUrl.length):1,a(home_page+"feeds/posts/summary?max-results=1&alt=json-in-script&callback=dataFeed")):(currentPage="label",-1==b.indexOf("&max-results=")&&(postResults=20),currentPageNo=-1!=locationUrl.indexOf("#PageNo=")?locationUrl.substring(locationUrl.indexOf("#PageNo=")+8,locationUrl.length):1,a(home_page+"feeds/posts/summary/-/"+postLabel+"?alt=json-in-script&callback=dataFeed&max-results=1")))}function dataFeed(a){var b=a.feed,c=parseInt(b.openSearch$totalResults.$t,10);startPagination(c)}function startPagination(a){var b,c,d,e,f,g,h="";pageNumber=parseInt(numOfPages/2),pageNumber==numOfPages-pageNumber&&(numOfPages=2*pageNumber+1),pageStart=currentPageNo-pageNumber,pageStart<1&&(pageStart=1),lastPageNo=parseInt(a/postResults)+1,lastPageNo-1==a/postResults&&(lastPageNo-=1),pageEnd=pageStart+numOfPages-1,pageEnd>lastPageNo&&(pageEnd=lastPageNo),h+='<span class="page-of">'+pageOf[0]+" "+currentPageNo+" "+pageOf[1]+" "+lastPageNo+"</span>",c=parseInt(currentPageNo)-1,currentPageNo>1&&(h+=2==currentPageNo?"page"==currentPage?'<a class="page-num page-prev" href="'+home_page+'"></a>':'<a class="page-num page-prev" href="/search/label/'+postLabel+"?&max-results="+postResults+'"></a>':"page"==currentPage?'<a class="page-num page-prev" href="#" onclick="getPage('+c+');return false"></a>':'<a class="page-num page-prev" href="#" onclick="getLabelPage('+c+');return false"></a>'),pageStart>1&&(h+="page"==currentPage?'<a class="page-num" href="'+home_page+'">1</a>':'<a class="page-num" href="/search/label/'+postLabel+"?&max-results="+postResults+'">1</a>'),pageStart>2&&(h+='<span class="page-num page-dots">...</span>');for(d=pageStart;d<=pageEnd;d++)h+=currentPageNo==d?'<span class="page-num page-active">'+d+"</span>":1==d?"page"==currentPage?'<a class="page-num" href="'+home_page+'">1</a>':'<a class="page-num" href="/search/label/'+postLabel+"?&max-results="+postResults+'">1</a>':"page"==currentPage?'<a class="page-num" href="#" onclick="getPage('+d+');return false">'+d+"</a>":'<a class="page-num" href="#" onclick="getLabelPage('+d+');return false">'+d+"</a>";pageEnd<lastPageNo-1&&(h+='<span class="page-num page-dots">...</span>'),pageEnd<lastPageNo&&(h+="page"==currentPage?'<a class="page-num" href="#" onclick="getPage('+lastPageNo+');return false">'+lastPageNo+"</a>":'<a class="page-num" href="#" onclick="getLabelPage('+lastPageNo+');return false">'+lastPageNo+"</a>"),e=parseInt(currentPageNo)+1,currentPageNo<lastPageNo&&(h+="page"==currentPage?'<a class="page-num page-next" href="#" onclick="getPage('+e+');return false"></a>':'<a class="page-num page-next" href="#" onclick="getLabelPage('+e+');return false"></a>'),f=document.getElementsByName("pageArea"),g=document.getElementById("blog-pager");for(p=0;p<f.length;p++)f[p].innerHTML=h;f&&f.length>0&&(h=""),g&&(g.innerHTML=h)}function getPage(a){jsonstart=postResults*(a-1),noPage=a;var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.setAttribute("src",home_page+"feeds/posts/summary?start-index="+jsonstart+"&max-results=1&alt=json-in-script&callback=findPostDate"),b.appendChild(c)}function getLabelPage(a){jsonstart=postResults*(a-1),noPage=a;var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.setAttribute("src",home_page+"feeds/posts/summary/-/"+postLabel+"?start-index="+jsonstart+"&max-results=1&alt=json-in-script&callback=findPostDate"),b.appendChild(c)}function findPostDate(a){post=a.feed.entry[0];var b=post.published.$t.substring(0,19)+post.published.$t.substring(23,29),c=encodeURIComponent(b),d="page"==currentPage?"/search?updated-max="+c+"&max-results="+postResults+"#PageNo="+noPage:"/search/label/"+postLabel+"?updated-max="+c+"&max-results="+postResults+"#PageNo="+noPage;location.href=d}pageCurrentBlogger();
 
 
 // 5. ===============================================================================
-//    Fungsi Text-to-Speech (TTS) dan Kontrol Font
+//    Fungsi Text-to-Speech (TTS)
 // ==================================================================================
 function initializeTTSSystem() {
     if (typeof lucide !== 'undefined') { lucide.createIcons(); }
@@ -315,7 +134,7 @@ function initializeTTSSystem() {
 }
 
 // 6. ===============================================================================
-//    Sistem Artikel Terkait Baru (Reliable Related Posts)
+//    Sistem Artikel Terkait (Reliable Related Posts)
 // ==================================================================================
 const reliableRelatedPosts = {
     maxPosts: 6,
@@ -379,78 +198,4 @@ const reliableRelatedPosts = {
 // ==================================================================================
 function initializeUtilities() {
     // --- SEOFIX.JS ---
-    document.querySelectorAll("a").forEach(function (a) {
-        if (!a.title || a.title.trim() === "") {
-            if (a.textContent.trim() !== "") { a.title = "Link ke: " + a.textContent.trim(); } 
-            else if (a.href) { a.title = "Buka tautan: " + a.href; }
-        }
-    });
-
-    // --- NOOP.JS ---
-    document.querySelectorAll('a[target="_blank"]').forEach(function (a) {
-        let relVal = a.getAttribute("rel") || "";
-        if (!relVal.includes("noopener")) { relVal += " noopener"; }
-        if (!relVal.includes("noreferrer")) { relVal += " noreferrer"; }
-        a.setAttribute("rel", relVal.trim());
-    });
-
-    // --- IMG.JS ---
-    const postTitle = document.title;
-    document.querySelectorAll(".post-body img").forEach(function (img, i) {
-        if (!img.hasAttribute("alt") || img.alt.trim() === "") {
-            img.alt = postTitle + " - Gambar " + (i + 1);
-        }
-        if (img.src.includes('1.bp.blogspot.com') || img.src.includes('blogspot.com')) {
-            img.src = img.src.replace(/s[0-9]+(-c)?/, 's1600');
-        }
-        img.loading = "lazy";
-        if (!img.hasAttribute("width") || !img.hasAttribute("height")) {
-            const tempImg = new Image();
-            tempImg.src = img.src;
-            tempImg.onload = function () {
-                if (!img.hasAttribute("width")) img.width = this.naturalWidth;
-                if (!img.hasAttribute("height")) img.height = this.naturalHeight;
-            };
-        }
-    });
-
-// 8. ===============================================================================
-//    Fungsi UI Tema
-// ==================================================================================
-function initializeThemeUI() {
-    // Menu Mobile
-    $('.mobile-menu-toggle').on('click', function(e) { e.preventDefault(); $('body').toggleClass('nav-active'); $('.overlay').fadeToggle('fast'); });
-    $('.overlay').on('click', function() { $('body').removeClass('nav-active'); $(this).fadeOut('fast'); });
-    $('.mobile-menu .m-sub').hide();
-    $('.mobile-menu .has-sub > a').on('click', function(e) { e.preventDefault(); $(this).parent().toggleClass('show'); $(this).next('.m-sub').slideToggle('fast'); });
-    // Navigasi Pencarian
-    $('.show-search').on('click', function(e) { e.preventDefault(); $('body').toggleClass('search-active'); $('#nav-search').fadeToggle('fast'); });
-    // Tombol Back to Top
-    $(window).on('scroll', function() { if ($(this).scrollTop() > 100) { $('.back-top').fadeIn('fast'); } else { $('.back-top').fadeOut('fast'); } });
-    $('.back-top').on('click', function() { $('html, body').animate({ scrollTop: 0 }, 800); return false; });
-}
-
-// 9. ===============================================================================
-//    Inisialisasi Skrip Utama
-// ==================================================================================
-document.addEventListener("DOMContentLoaded", function () {
-    initializeTTSSystem();
-    initializeUtilities();
-
-    // Inisialisasi Artikel Terkait (hanya di halaman postingan)
-    // **[PERBAIKAN]** Mengecek keberadaan elemen .item-post-wrap, bukan class di body.
-    if (document.querySelector('.item-post-wrap')) {
-        reliableRelatedPosts.init();
-    }
-});
-
-jQuery(window).on('load', function() {
-    initializeThemeUI();
-    // Inisialisasi Sticky Sidebar
-    if (typeof fixedSidebar !== 'undefined' && fixedSidebar === true && window.innerWidth > 991) {
-        jQuery('#sidebar-wrapper').theiaStickySidebar({
-            additionalMarginTop: 20,
-            additionalMarginBottom: 20
-        });
-    }
-});
+    document.querySelectorAll("a
