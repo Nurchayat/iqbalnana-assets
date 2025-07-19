@@ -330,7 +330,7 @@ const reliableRelatedPosts = {
         let html = this.title;
         html += '<div class="related-posts-grid">';
         postsToDisplay.forEach(post => {
-            const image = post.image ? post.image.replace(/\/s\d+(-c)?\//, '/s320-c/') : this.noImage;
+            const image = post.image ? post.image.replace(/\/s\d+(-c)?\//, '/s1600-c/') : this.noImage;
             html += `
                 <a class="related-post-item" href="${post.url}" title="${post.title}">
                     <div class="related-post-thumb-container">
@@ -401,7 +401,7 @@ function initializeUtilities() {
             img.alt = postTitle + " - Gambar " + (i + 1);
         }
         if (img.src.includes('1.bp.blogspot.com') || img.src.includes('blogspot.com')) {
-            img.src = img.src.replace(/s[0-9]+(-c)?/, 's480');
+            img.src = img.src.replace(/s[0-9]+(-c)?/, 's1600');
         }
         img.loading = "lazy";
         if (!img.hasAttribute("width") || !img.hasAttribute("height")) {
