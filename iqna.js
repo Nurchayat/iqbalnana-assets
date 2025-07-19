@@ -31,7 +31,7 @@ const reliableRelatedPosts = {
     noImage: "https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/s1600/nth.png",
     title: "<h3>Anda Mungkin Juga Suka</h3>",
     // [BARU] Tentukan daftar kategori prioritas Anda di sini, dari yang paling penting.
-    preferredLabels: ["Dongeng Anak", "Cerpen Anak", "Mewarnai Gambar", "Dongeng", "Cerita Fiksi"],
+    preferredLabels: ["Kesehatan dan Kebugaran", "Marga Satwa", "Novel Mini", "Cerita Misteri", "Cerita Rakyat", "Fantasi", "Fabel", "Cerpen Anak", "Dongeng Anak", "Cerita Pendek", "Dongeng", "Cerita Fiksi", "Teknologi", "Gaya Hidup", "Kiat dan edukasi", "Kreatifitas", "Pengembangan Diri", "Fakta Menarik", "Hiburan", "Fashion", "Ekonomi dan Keuangan", "Sosial Politik"],
 
     display: function(posts) {
         const container = document.getElementById(this.containerId);
