@@ -1,14 +1,15 @@
 /**
  * ==================================================================================
- * Skrip Gabungan untuk Tema Blogger Iqbalnana (v5 - Perbaikan Final Deteksi Halaman)
+ * Skrip Gabungan untuk Tema Blogger Iqbalnana (v6 - Implementasi Prioritas Kategori)
  * ==================================================================================
  * Berkas ini berisi gabungan dari berbagai skrip fungsional yang telah dioptimalkan
  * untuk menghindari konflik dan meningkatkan performa.
  *
- * Perubahan v5:
- * - [PERBAIKAN UTAMA] Mengubah kondisi deteksi halaman postingan dari '.item-post' 
- * menjadi '.item' pada tag <body>, sesuai dengan struktur tema. Ini akan 
- * memastikan Related Posts dan Widget Mewarnai dapat dimuat.
+ * Perubahan v6:
+ * - [FITUR BARU] Menambahkan daftar `preferredLabels` pada sistem Artikel Terkait.
+ * - Skrip sekarang akan mencari label prioritas terlebih dahulu untuk menampilkan 
+ * artikel terkait yang lebih relevan. Jika tidak ditemukan, akan kembali
+ * menggunakan label pertama.
  *
  * Daftar Isi:
  * 1. Sistem Artikel Terkait (Reliable Related Posts)
@@ -24,10 +25,13 @@
 //    Sistem Artikel Terkait (Reliable Related Posts)
 // ==================================================================================
 const reliableRelatedPosts = {
+    // --- KONFIGURASI ---
     maxPosts: 6,
     containerId: 'iqna-related-posts',
     noImage: "https://4.bp.blogspot.com/-O3EpVMWcoKw/WxY6-6I4--I/AAAAAAAAB2s/KzC0FqUQtkMdw7VzT6oOR_8vbZO6EJc-ACK4BGAYYCw/s1600/nth.png",
     title: "<h3>Anda Mungkin Juga Suka</h3>",
+    // [BARU] Tentukan daftar kategori prioritas Anda di sini, dari yang paling penting.
+    preferredLabels: ["Dongeng Anak", "Cerpen Anak", "Mewarnai Gambar", "Dongeng", "Cerita Fiksi"],
 
     display: function(posts) {
         const container = document.getElementById(this.containerId);
@@ -56,7 +60,6 @@ const reliableRelatedPosts = {
     },
 
     init: function() {
-        // [PERBAIKAN] Hanya berjalan di halaman postingan tunggal (kelas body adalah 'item')
         if (!document.body.classList.contains('item')) {
             return;
         }
@@ -64,14 +67,29 @@ const reliableRelatedPosts = {
         const container = document.getElementById(this.containerId);
         if (!container) return;
 
-        const firstLabelEl = document.querySelector('.post-labels a');
-        if (!firstLabelEl) {
+        const allLabelEls = document.querySelectorAll('.post-labels a');
+        if (allLabelEls.length === 0) {
             console.log('Related Posts: Tidak ada label ditemukan.');
             container.style.display = 'none';
             return;
         }
-        const firstLabel = firstLabelEl.innerText;
 
+        let chosenLabel = null;
+
+        // [LOGIKA BARU] Cari label prioritas
+        const postLabels = Array.from(allLabelEls).map(el => el.innerText);
+        for (const preferred of this.preferredLabels) {
+            if (postLabels.includes(preferred)) {
+                chosenLabel = preferred;
+                break;
+            }
+        }
+
+        // Jika tidak ada label prioritas yang cocok, gunakan label pertama sebagai fallback
+        if (!chosenLabel) {
+            chosenLabel = allLabelEls[0].innerText;
+        }
+        
         const currentUrlEl = document.querySelector('link[rel="canonical"]');
         if (!currentUrlEl) {
             console.log('Related Posts: URL kanonis tidak ditemukan.');
@@ -79,7 +97,7 @@ const reliableRelatedPosts = {
             return;
         }
         const currentUrl = currentUrlEl.href;
-        const feedUrl = `/feeds/posts/default/-/${encodeURIComponent(firstLabel)}?alt=json-in-script&max-results=10`;
+        const feedUrl = `/feeds/posts/default/-/${encodeURIComponent(chosenLabel)}?alt=json-in-script&max-results=10`;
 
         const callbackName = 'iqnaRelatedCallback';
         window[callbackName] = (json) => {
@@ -117,7 +135,6 @@ const reliableRelatedPosts = {
 //    Widget Gambar Mewarnai
 // ==================================================================================
 function initializeColoringWidget() {
-    // [PERBAIKAN] Hanya berjalan di halaman postingan tunggal (kelas body adalah 'item')
     if (!document.body.classList.contains('item')) {
         return;
     }
