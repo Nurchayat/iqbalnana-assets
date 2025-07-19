@@ -1,15 +1,14 @@
 /**
  * ==================================================================================
- * Skrip Gabungan untuk Tema Blogger Iqbalnana (v4 - Perbaikan Inisialisasi)
+ * Skrip Gabungan untuk Tema Blogger Iqbalnana (v5 - Perbaikan Final Deteksi Halaman)
  * ==================================================================================
  * Berkas ini berisi gabungan dari berbagai skrip fungsional yang telah dioptimalkan
  * untuk menghindari konflik dan meningkatkan performa.
  *
- * Perubahan v4:
- * - Memperbaiki logika inisialisasi untuk Related Posts dan Widget Mewarnai.
- * - Memastikan setiap modul berjalan secara independen dan hanya saat diperlukan.
- * - Menggunakan satu event listener utama 'DOMContentLoaded' untuk semua inisialisasi.
- * - Mengganti sistem related posts lama dengan yang lebih modern dan andal.
+ * Perubahan v5:
+ * - [PERBAIKAN UTAMA] Mengubah kondisi deteksi halaman postingan dari '.item-post' 
+ * menjadi '.item' pada tag <body>, sesuai dengan struktur tema. Ini akan 
+ * memastikan Related Posts dan Widget Mewarnai dapat dimuat.
  *
  * Daftar Isi:
  * 1. Sistem Artikel Terkait (Reliable Related Posts)
@@ -57,8 +56,8 @@ const reliableRelatedPosts = {
     },
 
     init: function() {
-        // Hanya berjalan di halaman postingan tunggal
-        if (!document.body.classList.contains('item-post')) {
+        // [PERBAIKAN] Hanya berjalan di halaman postingan tunggal (kelas body adalah 'item')
+        if (!document.body.classList.contains('item')) {
             return;
         }
 
@@ -118,8 +117,8 @@ const reliableRelatedPosts = {
 //    Widget Gambar Mewarnai
 // ==================================================================================
 function initializeColoringWidget() {
-    // Hanya berjalan di halaman postingan tunggal
-    if (!document.body.classList.contains('item-post')) {
+    // [PERBAIKAN] Hanya berjalan di halaman postingan tunggal (kelas body adalah 'item')
+    if (!document.body.classList.contains('item')) {
         return;
     }
     const container = document.getElementById('coloring-widget-grid');
@@ -344,9 +343,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Inisialisasi Sticky Sidebar jika jQuery tersedia
     if (typeof jQuery !== 'undefined' && typeof fixedSidebar !== 'undefined' && fixedSidebar === true && window.innerWidth > 991) {
-        jQuery('#sidebar-wrapper').theiaStickySidebar({
-            additionalMarginTop: 20,
-            additionalMarginBottom: 20
-        });
+        if (typeof jQuery.fn.theiaStickySidebar !== 'undefined') {
+             jQuery('#sidebar-wrapper').theiaStickySidebar({
+                additionalMarginTop: 20,
+                additionalMarginBottom: 20
+            });
+        }
     }
 });
